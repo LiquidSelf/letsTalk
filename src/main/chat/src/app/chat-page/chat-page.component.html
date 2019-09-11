@@ -1,0 +1,17 @@
+<div *ngIf="mess_serv.user">logged in as {{mess_serv.user.name}}</div>
+<div>
+  <button (click)="goBack()">go back</button>
+</div>
+<div class="chat_chat">
+  <span class="chat_title">chat</span>
+  <span #scroll class="chat_messages">
+    <div *ngFor="let message of mess_serv.messages" [class.my_message]="message.login === mess_serv.user.name" class="message">
+                   <span class="login">{{message.login === mess_serv.user.name ? ':' : ''}}{{message.login}}{{message.login === mess_serv.user.name ? '' : ':'}}</span>
+                   <span class="text">{{message.message}}</span>
+    </div>
+  </span>
+  <span class="input_text">
+    <input [(ngModel)]="message" (keyup.enter) = "sendMessage(message)" type="text" autofocus>
+    <button (click)="sendMessage(message) ">snd</button>
+  </span>
+</div>
