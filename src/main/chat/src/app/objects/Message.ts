@@ -1,9 +1,8 @@
 export class Message{
   message: string;
-  login: string;
+  username: string;
 
-  constructor(login: string, message: string) {
+  constructor(message: string) {
     this.message = message;
-    this.login = login;
   }
 }

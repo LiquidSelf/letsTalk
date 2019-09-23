@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessagingService } from '../messaging.service';
+import { Router } from '@angular/router';
+import { AuthService } from "../auth.service";
 
 @Component({
   selector: 'app-wellcome-page',
@@ -10,16 +12,28 @@ import { MessagingService } from '../messaging.service';
 })
 export class WellcomePageComponent implements OnInit {
 
-  login:string = 'unknown'
-
   constructor(
+    private auth: AuthService,
     private route: ActivatedRoute,
     private http: HttpClient,
-    private mess_serv: MessagingService
-  ) { }
-
-  ngOnInit() {
+    private mess_serv: MessagingService,
+    private router: Router
+  ) {
 
   }
 
+  ngOnInit() {
+  }
+
+  toChat(){
+    this.router.navigateByUrl("/chat")
+  }
+
+  logoutMethod(){
+    this.auth.logout();
+  }
+
+  showWellcome(){
+    this.router.navigateByUrl("/wellcome");
+  }
 }

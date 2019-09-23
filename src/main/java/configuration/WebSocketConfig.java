@@ -15,7 +15,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         System.out.println("registerWebSocketHandlers");
-        registry.addHandler(myHandler(), "/ws");
+        registry.addHandler(myHandler(), "/api/chat/web_socket");
     }
 
     @Bean

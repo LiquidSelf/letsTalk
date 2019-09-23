@@ -2,14 +2,14 @@ package beans;
 
 public class Message {
     private String message;
-    private String login;
+    private String username;
 
     public Message(){
     }
 
-    public Message(String message, String login) {
+    public Message(String message, String userName) {
         this.message = message;
-        this.login = login;
+        this.username = userName;
     }
 
     public String getMessage() {
@@ -20,11 +20,11 @@ public class Message {
         this.message = message;
     }
 
-    public String getLogin() {
-        return login;
+    public String getUsername() {
+        return username;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 }

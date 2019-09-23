@@ -15,77 +15,56 @@ export class MessagingService implements Observer<Message>{
 
   private origin_url: string = window.location.origin;
   private subject   : WebSocketSubject<Message>;
-  private user      : any;
   private messages  : Message[] = [];
 
   closed: boolean;
-  next: (value: Message) => void;
-  error: (err: any) => void;
-  complete: () => void;
+
+  next = function (mess:Message) {
+    this.onMessage(mess);
+  };
+  error= function (err) {
+    console.error("error on MessagingService ws", err);
+  };
+  complete = function () {
+  };
 
   constructor(
     private http: HttpClient
   )
   {
-    this.http.get<String>(this.origin_url+'/whoAmI')
-      .subscribe(
-        (value:any)=>{
-          this.user = value;
-          this.initWs();
-          },
-        (error:any)=>{
-          MessagingService.redirectLogout();
-        },
-        ()=>{}
-        )
   }
 
-  public static redirectLogout(){
-      document.location.href = 'logout';
-  }
-
-  private initWs(){
-    this.next = (value:Message)=>{this.onMessage(value)}
-    this.error = (err: any) => {console.log('error', err)}
-    this.complete = () => {console.log('complete')}
-
-    this.subject = webSocket({
-      url: this.origin_url.replace('http', 'ws')+"/ws",
-      closeObserver: {
-        next: (close_event) => {
-          console.log(this.subject._output);
-          if(this.subject._output.observers.length === 0)
-            this.subject.subscribe(this);
-        }
-      },
-
-      openObserver: {
-        next: (open_event) => {
-          console.log("opn")
-        }
-      },
-
-      closingObserver:{
-        next: () => {
-          window.alert('closin');
-        }
-      },
-    })
-
-
-    this.subject.subscribe(this);
-
-    console.log(this.subject._output);
-
+  public init(){
     this.getAllMessages().subscribe(
       (result:Message[])=>{
         this.messages = result;
       }
     );
+
+    this.subject = webSocket({
+      url: this.origin_url.replace('http', 'ws')+"/api/chat/web_socket",
+      closeObserver: {
+        next: (close_event) => {
+        }
+      },
+
+      openObserver: {
+        next: (open_event) => {
+        }
+      },
+
+      closingObserver:{
+        next: () => {
+          console.log('clossi\'n');
+        }
+      },
+    })
+
+    this.subject.subscribe(this);
   }
 
   getAllMessages():Observable<Message[]>{
-    return this.http.get<Message[]>(this.origin_url + '/getMessages');
+    return this.http.get<Message[]>(this.origin_url + '/api/chat/getMessages');
   }
 
   onMessage(mess: Message){
@@ -93,7 +72,7 @@ export class MessagingService implements Observer<Message>{
   }
 
   sendMessage(message: string){
-    var mes:Message = new Message(this.user.name, message);
+    var mes:Message = new Message(message);
     this.subject.next(mes);
   }
 

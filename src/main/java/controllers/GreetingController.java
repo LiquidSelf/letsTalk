@@ -3,6 +3,7 @@ package controllers;
 import beans.Greeting;
 import beans.Message;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.sun.javafx.util.Logging;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
+@RequestMapping("/api/greeting")
 public class GreetingController {
 
     @Autowired
@@ -33,7 +35,7 @@ public class GreetingController {
 
     @RequestMapping("/hello")
     public Greeting hello(@RequestParam(value="name", defaultValue="World") String name) {
-        Greeting greeting = new Greeting(1l, "приветинг 1");
+        Greeting greeting = new Greeting(1l, "hell-o");
         return greeting;
     }
 
@@ -47,16 +49,5 @@ public class GreetingController {
         System.out.println(description);
         s.close();
         return "Description is " + description;
-    }
-
-    @RequestMapping(value = "/getMessages", method = RequestMethod.GET)
-    public List<Message> getMessages() {
-        return WSHandler.messages;
-    }
-
-
-    @RequestMapping(value = "/whoAmI", method = RequestMethod.GET)
-    public Principal whoAmI(Principal principal) {
-        return principal;
     }
 }

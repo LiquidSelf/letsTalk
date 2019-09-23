@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { AuthService } from "./auth.service";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Chat with spring';
+
+  constructor(private app: AuthService,
+              private http: HttpClient,
+              private router: Router,
+              private auth: AuthService
+  ) {
+    auth.mee((principal)=>{});
+  }
 }

@@ -2,17 +2,29 @@ package main.webapp.java;
 
 import configuration.WebConfig;
 import configuration.WebSecurityConfig;
-import filters.CharacterSetFilter;
+import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import javax.servlet.FilterRegistration;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class AnnotationsBasedApplicationInitializer
         extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    @Nullable
+    @Override
+    protected ApplicationContextInitializer<?>[] getRootApplicationContextInitializers() {
+        return super.getRootApplicationContextInitializers();
+    }
 
     @Nullable
     @Override
@@ -39,12 +51,30 @@ public class AnnotationsBasedApplicationInitializer
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
-        super.onStartup(servletContext);
-        FilterRegistration.Dynamic charFilter = servletContext.addFilter(CharacterSetFilter.class.getName(), new CharacterSetFilter());
-//        charFilter.setInitParameter("encoding", "UTF-8");
-//        charFilter.setInitParameter("forceEncoding", "true");
-        charFilter.addMappingForUrlPatterns(null, true, "/*");
 
+        super.onStartup(servletContext);
+
+        final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter(){
+            @Override
+            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+                response.setHeader("privet", "ANDREEEY BLINAAA!! PRIVET:)");
+                super.doFilterInternal(request, response, filterChain);
+            }
+        };
+
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceEncoding(true);
+
+        FilterRegistration.Dynamic registration = servletContext.addFilter(CharacterEncodingFilter.class.getName(), characterEncodingFilter);
+
+        registration.addMappingForUrlPatterns(null, true, "/*");
     }
 
+    @Override
+    protected DispatcherServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
+        System.out.println("createDispatcherServlet");
+        final DispatcherServlet dispatcherServlet = (DispatcherServlet) super.createDispatcherServlet(servletAppContext);
+        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+        return dispatcherServlet;
+    }
 }

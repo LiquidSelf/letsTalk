@@ -1,4 +1,12 @@
 
-<div *ngIf="mess_serv.user && mess_serv.user.name">wellcome {{mess_serv.user.name}}</div>
-<div><a routerLink="/chat">some chat?</a></div>
+<div *ngIf="auth.principal">
+  wellcome {{auth.principal.username}} !
+  <div></div>
+  <button (click)="toChat()" class="btn btn-primary"><a>Chat</a></button>
+  <button (click)="logoutMethod()" class="btn btn-primary"><a>Logout</a></button>
+</div>
 
+<div *ngIf="!auth.principal">
+  <div>You are not logged in</div>
+  <a routerLink="/login"><button class="btn btn-primary">Login</button></a>
+</div>

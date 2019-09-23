@@ -76,3 +76,8 @@
   width:100%;
   box-sizing: border-box;
 }
+
+.userName{
+  font-style: italic;
+  letter-spacing: -1px;
+}

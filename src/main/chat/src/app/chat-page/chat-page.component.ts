@@ -2,6 +2,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MessagingService } from '../messaging.service';
 import { Component, AfterViewChecked, ElementRef, ViewChild, OnInit} from '@angular/core'
+import { AuthService } from "../auth.service";
+
+
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
@@ -14,11 +17,19 @@ export class ChatPageComponent implements OnInit {
 
   private message:string;
 
-  constructor(
+  constructor
+  (
+    private auth: AuthService,
     private route: ActivatedRoute,
     private location: Location,
-    private mess_serv: MessagingService
-  ) {}
+    private mess_serv: MessagingService,
+  )
+  {
+     if(auth.isAuthenticated())
+     mess_serv.init();
+     else
+     location.back();
+  }
 
   ngOnInit() {
     this.scrollToBottom();
