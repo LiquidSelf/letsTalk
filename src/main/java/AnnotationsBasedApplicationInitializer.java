@@ -1,15 +1,12 @@
 package main.webapp.java;
 
 import configuration.WebConfig;
-import configuration.WebSecurityConfig;
+import security.WebSecurityConfig;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.*;
@@ -54,20 +51,20 @@ public class AnnotationsBasedApplicationInitializer
 
         super.onStartup(servletContext);
 
-        final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter(){
-            @Override
-            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-                response.setHeader("privet", "ANDREEEY BLINAAA!! PRIVET:)");
-                super.doFilterInternal(request, response, filterChain);
-            }
-        };
-
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-
-        FilterRegistration.Dynamic registration = servletContext.addFilter(CharacterEncodingFilter.class.getName(), characterEncodingFilter);
-
-        registration.addMappingForUrlPatterns(null, true, "/*");
+//        final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter(){
+//            @Override
+//            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+//                response.setHeader("privet", "ANDREEEY BLINAAA!! PRIVET:)");
+//                super.doFilterInternal(request, response, filterChain);
+//            }
+//        };
+//
+//        characterEncodingFilter.setEncoding("UTF-8");
+//        characterEncodingFilter.setForceEncoding(true);
+//
+//        FilterRegistration.Dynamic registration = servletContext.addFilter(CharacterEncodingFilter.class.getName(), characterEncodingFilter);
+//
+//        registration.addMappingForUrlPatterns(null, true, "/*");
     }
 
     @Override

@@ -1,24 +1,22 @@
-package configuration;
+package security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import filters.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.security.web.authentication.logout.LogoutHandler;
-import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -37,29 +35,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return manager;
     }
-
-//    @Autowired
-//    public void inMemoryUsers(AuthenticationManagerBuilder builder) throws Exception {
-//        builder.inMemoryAuthentication().withUser("user").password("user").roles("USER");
-//    }
-//
-//    @Bean
-//    public PasswordEncoder passEncoder(){
-//        return NoOpPasswordEncoder.getInstance();
-//    }
-
-
-//    @Bean
-//    protected AuthenticationManager authenticationManager() throws Exception {
-//        return new AuthenticationManager() {
-//            @Override
-//            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-//                System.out.println("getPrincipal: " + authentication.getPrincipal());
-//                System.out.println("getCredentials: " + authentication.getCredentials());
-//                return null;
-//            }
-//        };
-//    }
 
     @Bean
     public SimpleUrlAuthenticationSuccessHandler authSuccHandler() {
@@ -109,6 +84,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 response.setStatus(200);
             }
         };
+    }
+
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     protected void configure(HttpSecurity http) throws Exception {
@@ -175,15 +157,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .permitAll();
 
 
+        //ok
         http
 
                 .authorizeRequests().anyRequest().permitAll()
-                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and().authorizeRequests().antMatchers("/authenticate").permitAll()
                 .and().formLogin().loginPage("/").loginProcessingUrl("/login")
                 .successHandler(authSuccHandler()).failureHandler(authFailHandler()).permitAll()
                 .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").logoutSuccessHandler(logoutSuccHandler()).permitAll()
                 .and().authorizeRequests().antMatchers("/api/mee").permitAll()
-                .and().authorizeRequests().antMatchers("/api/**").hasRole("USER");
+                .and().authorizeRequests().antMatchers("/api/**").hasRole("USER")
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().csrf().disable();
+
+        http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
 

@@ -29,6 +29,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.8.2</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
@@ -221,7 +229,7 @@
                 <version>3.8.0</version>
                 <configuration>
                     <excludes>
-                        <exclude>${project.basedir}/src/main/chat/**</exclude>
+                        <exclude>${project.basedir}/src/main/ng/**</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -230,7 +238,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.2</version>
                 <configuration>
-                    <packagingExcludes>${project.basedir}/src/main/chat/**</packagingExcludes>
+                    <packagingExcludes>${project.basedir}/src/main/ng/**</packagingExcludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -243,7 +251,7 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <!--<skip>true</skip>-->
-                            <workingDirectory>${project.basedir}/src/main/chat</workingDirectory>
+                            <workingDirectory>${project.basedir}/src/main/ng</workingDirectory>
                             <executable>ng</executable>
                             <arguments>
                                 <argument>build</argument>

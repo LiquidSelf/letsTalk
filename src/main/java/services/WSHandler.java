@@ -1,4 +1,4 @@
-package controllers;
+package services;
 
 import beans.Message;
 import com.fasterxml.jackson.core.JsonProcessingException;

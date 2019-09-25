@@ -1,6 +1,6 @@
 chat_one.iml
-src/main/chat/e2e
-src/main/chat/node_modules
+src/main/ng/e2e
+src/main/ng/node_modules
 .DS_Store
 src/main/webapp
 target

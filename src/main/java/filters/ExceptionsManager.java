@@ -1,4 +1,4 @@
-package controllers;
+package filters;
 
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.ModelAndView;

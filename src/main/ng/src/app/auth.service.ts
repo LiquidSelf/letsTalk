@@ -28,7 +28,8 @@ export class AuthService {
   authenticate(credentials, callback?) {
 
     let headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded'}
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
       );
 
     const params = new HttpParams({
