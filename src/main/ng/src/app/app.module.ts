@@ -7,6 +7,8 @@ import { ChatPageComponent } from './chat-page/chat-page.component';
 import { WellcomePageComponent } from './wellcome-page/wellcome-page.component';
 import { HttpClientModule }    from '@angular/common/http';
 import { LoginPageComponent } from './login-page/login-page.component';
+import { TokenInterseptor } from "./interseptor";
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -21,7 +23,9 @@ import { LoginPageComponent } from './login-page/login-page.component';
     HttpClientModule,
     FormsModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterseptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

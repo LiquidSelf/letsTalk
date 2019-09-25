@@ -8,19 +8,19 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private static USER_TOKEN:string = "saved_user";
+  private static USER_TOKEN:string = "saved_token";
   principal: any;
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) {
-    this.principal = this.pullUser();
+    // this.principal = this.pullUser();
   }
 
   mee(callback?){
     this.http.get("/api/mee").subscribe(next=>{
-      this.putUser(next);
+      // this.putUser(next);
       callback(next);
     })
   }
@@ -28,28 +28,28 @@ export class AuthService {
   authenticate(credentials, callback?) {
 
     let headers = new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-      );
-
-    const params = new HttpParams({
-      fromObject: credentials
+      'Content-Type': 'application/json'
     });
 
+    // const params = new HttpParams({
+    //   fromObject: credentials
+    // });
+
     this.http.post<any>(
-      "/login",
-      params,
+      "/authenticate",
+      credentials,
       {
         headers:headers
       }
     ).subscribe(
       (next)=>{
-        this.putUser(next);
+        console.log(next);
+        this.putToken(next.token);
         this.router.navigateByUrl('/wellcome');
       },
       (error) => {
         callback(error.error.localizedMessage);
-        this.putUser(null)
+        this.putToken(null);
         this.router.navigateByUrl('/login?error=1');
       }
       );
@@ -57,7 +57,7 @@ export class AuthService {
 
   logout(){
     let func = (e)=>{
-      this.putUser(null)
+      this.putToken(null)
       this.router.navigateByUrl('/login');
     }
 
@@ -72,14 +72,11 @@ export class AuthService {
      return false;
   }
 
-  private putUser(user){
-    localStorage.setItem(AuthService.USER_TOKEN, JSON.stringify(user));
-    this.principal = user;
+  private putToken(token:string){
+     localStorage.setItem(AuthService.USER_TOKEN, token);
   }
 
-  private pullUser():any{
-    let st:string = localStorage.getItem(AuthService.USER_TOKEN);
-    if(!st) return null;
-    return JSON.parse(st);
+  getToken():string{
+    return localStorage.getItem(AuthService.USER_TOKEN);
   }
 }
