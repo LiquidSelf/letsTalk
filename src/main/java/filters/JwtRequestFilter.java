@@ -1,7 +1,9 @@
 package filters;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import services.JwtTokenUtil;
 
@@ -11,12 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtil tokenUtil;
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsService detailsService;
 
     @Override
     protected void doFilterInternal(
@@ -24,11 +27,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     ) throws ServletException, IOException {
-
-        String token = request.getHeader("Authentication");
-        request.getAuthType();
-
-
+        String token = tokenUtil.getTokenFromRequest(request);
+        if(!tokenUtil.isVld(token)){
+            response.setStatus(HttpStatus.FORBIDDEN.value());
+            return;
+        }
         filterChain.doFilter(request,response);
+    }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+        return !path.startsWith("/api");
     }
 }

@@ -1,6 +1,6 @@
 package configuration;
 
-import services.WSHandler;
+import services.ws.WSHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
@@ -15,7 +15,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         System.out.println("registerWebSocketHandlers");
-        registry.addHandler(myHandler(), "/api/chat/web_socket");
+        registry.addHandler(myHandler(), "/ws_api/chat/web_socket");
     }
 
     @Bean

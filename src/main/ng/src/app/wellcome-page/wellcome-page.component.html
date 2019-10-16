@@ -1,12 +1,14 @@
 
-<div *ngIf="auth.principal">
-  wellcome {{auth.principal.username}} !
+<div *ngIf="auth.getSub()">
+  wellcome {{auth.getSub()}} !
   <div></div>
   <button (click)="toChat()" class="btn btn-primary"><a>Chat</a></button>
   <button (click)="logoutMethod()" class="btn btn-primary"><a>Logout</a></button>
 </div>
 
-<div *ngIf="!auth.principal">
+<div *ngIf="!auth.getSub()">
   <div>You are not logged in</div>
   <a routerLink="/login"><button class="btn btn-primary">Login</button></a>
 </div>
+
+<button (click)="test()" class="btn btn-primary"><a>test</a></button>

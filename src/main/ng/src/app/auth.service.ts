@@ -9,31 +9,20 @@ import { Router } from '@angular/router';
 export class AuthService {
 
   private static USER_TOKEN:string = "saved_token";
-  principal: any;
+
+  error:any = null;
 
   constructor(
     private http: HttpClient,
     private router: Router
   ) {
-    // this.principal = this.pullUser();
   }
 
-  mee(callback?){
-    this.http.get("/api/mee").subscribe(next=>{
-      // this.putUser(next);
-      callback(next);
-    })
-  }
-
-  authenticate(credentials, callback?) {
+  authenticate(credentials) {
 
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-
-    // const params = new HttpParams({
-    //   fromObject: credentials
-    // });
 
     this.http.post<any>(
       "/authenticate",
@@ -43,33 +32,41 @@ export class AuthService {
       }
     ).subscribe(
       (next)=>{
-        console.log(next);
         this.putToken(next.token);
         this.router.navigateByUrl('/wellcome');
+        this.error = null;
       },
       (error) => {
-        callback(error.error.localizedMessage);
         this.putToken(null);
         this.router.navigateByUrl('/login?error=1');
+        this.error = error;
       }
       );
   }
 
+  parseJwt (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+  };
+
   logout(){
-    let func = (e)=>{
+    let func = ()=>{
       this.putToken(null)
       this.router.navigateByUrl('/login');
     }
 
-    this.http.post("/logout","").subscribe(
-      func,
-      func
-    );
+    func();
   }
 
-  isAuthenticated():boolean{
-     if(this.principal) return true;
-     return false;
+  getSub():string{
+    if(!this.getToken()) return null;
+    let decoded = this.parseJwt(this.getToken());
+    return decoded.sub;
   }
 
   private putToken(token:string){
@@ -77,6 +74,14 @@ export class AuthService {
   }
 
   getToken():string{
-    return localStorage.getItem(AuthService.USER_TOKEN);
+    let token = localStorage.getItem(AuthService.USER_TOKEN);
+    if(!token || token === "null") return null;
+    return token;
+  }
+
+  wsTempTiket(callback){
+    this.http.get('/api/chat/ws_tiket',
+      {responseType: 'text'}
+    ).subscribe(callback);
   }
 }

@@ -29,6 +29,9 @@ export class WellcomePageComponent implements OnInit {
     this.router.navigateByUrl("/chat")
   }
 
+  test(){
+  }
+
   logoutMethod(){
     this.auth.logout();
   }

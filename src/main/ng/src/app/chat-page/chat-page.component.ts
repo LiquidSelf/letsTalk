@@ -25,10 +25,31 @@ export class ChatPageComponent implements OnInit {
     private mess_serv: MessagingService,
   )
   {
-     if(auth.isAuthenticated())
-     mess_serv.init();
+
+     let callback = {
+       next:(tiket:string) => this.initConnection(tiket),
+       error:(error:any)   => this.handleError(error)
+     }
+
+     if(auth.getSub())
+     this.auth.wsTempTiket(callback)
      else
      location.back();
+  }
+
+  initConnection(tiket:string){
+    if(!tiket || tiket === 'null'){
+      this.handleError(null)
+      return;
+    }
+    else
+    this.mess_serv.init(tiket);
+  }
+
+  handleError(error){
+    if(error && error.status === 403){
+      console.log("$)$))$)343")
+    }
   }
 
   ngOnInit() {
@@ -47,6 +68,7 @@ export class ChatPageComponent implements OnInit {
 
   goBack(): void {
     this.location.back();
+    this.mess_serv.closeWs();
   }
 
   sendMessage(message:string): void{

@@ -18,7 +18,10 @@ import java.io.IOException;
 public class Utf8Filter extends CharacterEncodingFilter {
 
     public Utf8Filter() {
-        super("UTF-8", true, true);
+        super(  "UTF-8",
+                true,
+                true
+        );
     }
 
     @Override

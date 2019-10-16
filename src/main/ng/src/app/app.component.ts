@@ -15,6 +15,5 @@ export class AppComponent {
               private router: Router,
               private auth: AuthService
   ) {
-    auth.mee((principal)=>{});
   }
 }

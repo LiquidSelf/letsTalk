@@ -2,6 +2,8 @@ package security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import filters.JwtRequestFilter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -26,6 +28,9 @@ import java.io.IOException;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private ApplicationContext context;
 
     @Bean
     public UserDetailsService userDetailsService()  {
@@ -170,7 +175,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable();
 
-        http.addFilterBefore(new JwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(context.getBean(JwtRequestFilter.class), UsernamePasswordAuthenticationFilter.class);
     }
 
 

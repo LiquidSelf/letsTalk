@@ -3,8 +3,9 @@ package configuration;
 import beans.Greeting;
 import controllers.AngularREST;
 import controllers.BasicController;
-import filters.ExceptionsManager;
 import controllers.GreetingController;
+import filters.ExceptionsManager;
+import filters.JwtRequestFilter;
 import filters.Utf8Filter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,11 +18,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import services.JwtTokenUtil;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -33,7 +29,8 @@ import java.util.List;
         AngularREST.class,
         Greeting.class,
         HibernateConfiguration.class,
-        JwtTokenUtil.class
+        JwtTokenUtil.class,
+        JwtRequestFilter.class
 })
 @Configuration
 public class WebConfig

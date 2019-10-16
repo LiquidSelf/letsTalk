@@ -11,7 +11,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class LoginPageComponent implements OnInit {
 
-  errorMessage:string;
 
   credentials = {
     username: '',
@@ -24,16 +23,12 @@ export class LoginPageComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.errorMessage = null;
   }
 
   ngOnInit() {
   }
 
   onSubmit(){
-    this.auth.authenticate(this.credentials, (response)=>{
-      if(response)
-      this.errorMessage = response;
-    });
+    this.auth.authenticate(this.credentials);
   }
 }

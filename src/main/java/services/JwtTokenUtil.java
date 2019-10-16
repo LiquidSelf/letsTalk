@@ -3,6 +3,7 @@ package services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.sun.org.apache.xml.internal.security.algorithms.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,7 +21,8 @@ import java.util.function.BiConsumer;
 @Component
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
-    public static final long JWT_TOKEN_EXPIRATION = 5 * 60 * 60;
+    public static final long JWT_TOKEN_EXPIRATION = 60;
+    public static final String AUTH_HEADER = "Authorization";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -65,9 +68,26 @@ public class JwtTokenUtil implements Serializable {
                 sign(Algorithm.HMAC512(secret));
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public void validateToken(String token) throws JWTVerificationException {
         JWT.require(Algorithm.HMAC512(secret)).build().verify(token);
-        final String username = getUsernameFromToken(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public boolean isVld(String token){
+        try {
+            validateToken(token);
+            return true;
+        }catch (JWTVerificationException ex){
+            System.out.println(ex);
+            return false;
+        }
+    }
+
+    public String getTokenFromRequest(HttpServletRequest request){
+        try{
+            return request.getHeader(AUTH_HEADER).replaceFirst("Bearer ","");
+        }catch (Exception ex){
+            System.out.println("getTokenFromRequest ex: " + ex.getMessage());
+            return null;
+        }
     }
 }

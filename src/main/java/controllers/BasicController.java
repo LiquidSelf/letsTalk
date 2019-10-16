@@ -13,11 +13,6 @@ import java.security.Principal;
 @Controller
 public class BasicController {
 
-//    @GetMapping("/logout")
-//    public String logout(Principal principal) {
-//        System.out.println("logout");
-//        return "/index.html#logout";
-//    }
     @GetMapping("/")
     public String ddd(Authentication authentication) {
         return "index.html";
