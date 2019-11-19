@@ -33,7 +33,7 @@ export class TopBarComponent implements OnInit {
   editProfile(){
     const dialog = this.dialog.open(UserCabinetComponent, {
       width: '250px',
-      data: new UserProfileDTO(1,"test", 23)
+      data: new UserProfileDTO("test", 23)
     });
 
     dialog.afterClosed().subscribe(result=>{
