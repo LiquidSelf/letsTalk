@@ -36,7 +36,7 @@ public class DatabaseConfig {
     @DependsOn("dataSource")
     public SpringLiquibase springLiquibase() throws NamingException {
         SpringLiquibase springLiquibase = new SpringLiquibase();
-        springLiquibase.setChangeLog("classpath:changelog/rootChangelog.xml");
+        springLiquibase.setChangeLog("classpath:/liquibase/rootChangelog.xml");
         springLiquibase.setDataSource(dataSource());
 
         return springLiquibase;
