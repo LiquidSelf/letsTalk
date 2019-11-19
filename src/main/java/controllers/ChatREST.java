@@ -1,6 +1,6 @@
 package controllers;
 
-import beans.Message;
+import dto.Message;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;

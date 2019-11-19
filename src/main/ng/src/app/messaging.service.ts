@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Message } from "./objects/Message";
 import { Observable, of } from 'rxjs';
 import { webSocket } from 'rxjs/webSocket';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -8,6 +7,7 @@ import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
 import { Observer } from 'rxjs/internal/types';
 import { Subscription } from 'rxjs/internal/Subscription';
 import {AuthService} from "./auth.service";
+import {Message} from "./chat-page/Message";
 
 @Injectable({
   providedIn: 'root'

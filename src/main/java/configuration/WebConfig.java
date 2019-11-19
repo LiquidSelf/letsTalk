@@ -1,6 +1,6 @@
 package configuration;
 
-import beans.Greeting;
+import dto.Greeting;
 import controllers.AngularREST;
 import controllers.BasicController;
 import controllers.GreetingController;
@@ -28,7 +28,7 @@ import java.util.List;
         GreetingController.class,
         AngularREST.class,
         Greeting.class,
-        HibernateConfiguration.class,
+        DatabaseConfig.class,
         JwtTokenUtil.class,
         JwtRequestFilter.class
 })

@@ -4,6 +4,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessagingService } from '../messaging.service';
 import { Router } from '@angular/router';
 import { AuthService } from "../auth.service";
+import { AppErrorsService } from "../app-errors.service";
+import { ErrorMessage } from "../app-errors.service";
+
 
 @Component({
   selector: 'app-wellcome-page',
@@ -12,31 +15,29 @@ import { AuthService } from "../auth.service";
 })
 export class WellcomePageComponent implements OnInit {
 
+  private chatShown:boolean = false;
+
   constructor(
     private auth: AuthService,
     private route: ActivatedRoute,
     private http: HttpClient,
     private mess_serv: MessagingService,
-    private router: Router
+    private router: Router,
+    private appErr: AppErrorsService,
   ) {
 
   }
-
   ngOnInit() {
   }
 
-  toChat(){
-    this.router.navigateByUrl("/chat")
-  }
-
   test(){
+    this.appErr.newMessage(new ErrorMessage("privet!"))
   }
 
-  logoutMethod(){
-    this.auth.logout();
-  }
-
-  showWellcome(){
-    this.router.navigateByUrl("/wellcome");
+  togleChat(){
+    this.chatShown = !this.chatShown;
+    if(this.chatShown){
+      this.mess_serv.closeWs();
+    }
   }
 }

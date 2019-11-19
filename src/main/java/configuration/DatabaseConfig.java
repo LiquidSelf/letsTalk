@@ -1,13 +1,16 @@
 package configuration;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -16,9 +19,10 @@ import static org.hibernate.cfg.AvailableSettings.HBM2DDL_AUTO;
 
 @Configuration
 @EnableTransactionManagement
-public class HibernateConfiguration {
+public class DatabaseConfig {
 
     @Bean
+    @DependsOn("springLiquibase")
     public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(dataSource());
@@ -29,10 +33,20 @@ public class HibernateConfiguration {
     }
 
     @Bean
+    @DependsOn("dataSource")
+    public SpringLiquibase springLiquibase() throws NamingException {
+        SpringLiquibase springLiquibase = new SpringLiquibase();
+        springLiquibase.setChangeLog("classpath:changelog/rootChangelog.xml");
+        springLiquibase.setDataSource(dataSource());
+
+        return springLiquibase;
+    }
+
+    @Bean
     public DataSource dataSource() {
         BasicDataSource dataSource = new BasicDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/museum?characterEncoding=UTF-8");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/lets_talk?characterEncoding=UTF-8&createDatabaseIfNotExist=true");
         dataSource.setUsername("museum");
         dataSource.setPassword("museum");
 

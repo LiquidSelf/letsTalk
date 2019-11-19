@@ -1,16 +1,12 @@
 package controllers;
 
-import beans.Greeting;
-import beans.Message;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.javafx.util.Logging;
+import dto.Greeting;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.security.Principal;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 

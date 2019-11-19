@@ -1,11 +1,7 @@
-<div *ngIf="auth.getSub()">logged in as {{auth.getSub()}}</div>
-<div>
-  <button (click)="goBack()" class="btn btn-primary">go back</button>
-</div>
 <div class="chat_holder">
   <div *ngIf="!mess_serv.connected" class="loading" >
     <div>Connecting...</div>
-    <img src="https://loading.io/spinners/ellipsis/lg.discuss-ellipsis-preloader.gif">
+    <img src="https://loading.io/spinners/wave/lg.wave-ball-preloader.gif">
   </div>
   <div *ngIf="mess_serv.connected" class="chat_chat">
     <span class="chat_title">chat</span>

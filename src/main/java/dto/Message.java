@@ -1,4 +1,4 @@
-package beans;
+package dto;
 
 public class Message {
     private String message;

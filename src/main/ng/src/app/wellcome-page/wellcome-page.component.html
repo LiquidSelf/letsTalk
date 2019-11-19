@@ -1,14 +1,20 @@
+<div id = "wellcome_page">
+  <div *ngIf="auth.getSub()">
+    <app-top-bar></app-top-bar>
+    <!--<app-left-bar></app-left-bar>-->
+    <div id = "chat">
+      <button (click)="togleChat()" class="btn btn-primary"><a>chat</a></button>
+      <app-chat-page *ngIf="chatShown"></app-chat-page>
+    </div>
 
-<div *ngIf="auth.getSub()">
-  wellcome {{auth.getSub()}} !
-  <div></div>
-  <button (click)="toChat()" class="btn btn-primary"><a>Chat</a></button>
-  <button (click)="logoutMethod()" class="btn btn-primary"><a>Logout</a></button>
-</div>
+    <div id = "error_popup">
+      <app-friendly-errors></app-friendly-errors>
+    </div>
+  </div>
 
-<div *ngIf="!auth.getSub()">
-  <div>You are not logged in</div>
-  <a routerLink="/login"><button class="btn btn-primary">Login</button></a>
-</div>
+  <div *ngIf="!auth.getSub()" id="please_login">
+    <div>You're not logged in. Please <span><a routerLink="/login">login</a></span>.</div>
+  </div>
 
 <button (click)="test()" class="btn btn-primary"><a>test</a></button>
+</div>

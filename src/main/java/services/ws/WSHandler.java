@@ -1,6 +1,6 @@
 package services.ws;
 
-import beans.Message;
+import dto.Message;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +9,6 @@ import services.JwtTokenUtil;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.function.BiConsumer;
 
 import static org.springframework.web.socket.CloseStatus.SESSION_NOT_RELIABLE;
 

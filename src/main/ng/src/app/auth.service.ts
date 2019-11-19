@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpParams} from '@angular/common/http' ;
 import { Router } from '@angular/router';
+import {UserProfileDTO} from "./top-bar/UserProfileDTO";
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,12 @@ export class AuthService {
     if(!this.getToken()) return null;
     let decoded = this.parseJwt(this.getToken());
     return decoded.sub;
+  }
+
+
+  getUser():UserProfileDTO{
+    this.http.get('/api/');
+    return null;
   }
 
   private putToken(token:string){
