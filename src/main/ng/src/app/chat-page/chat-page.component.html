@@ -1,8 +1,4 @@
 <div class="chat_holder">
-  <div *ngIf="!mess_serv.connected" class="loading" >
-    <div>Connecting...</div>
-    <img src="https://loading.io/spinners/wave/lg.wave-ball-preloader.gif">
-  </div>
   <div *ngIf="mess_serv.connected" class="chat_chat">
     <span class="chat_title">chat</span>
     <span #scroll class="chat_messages">

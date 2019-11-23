@@ -2,6 +2,7 @@ package configuration;
 
 import liquibase.integration.spring.SpringLiquibase;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
+import org.hibernate.tool.schema.Action;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -64,7 +65,7 @@ public class DatabaseConfig {
     private final Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty(
-                HBM2DDL_AUTO, "create-drop");
+                HBM2DDL_AUTO, "validate");
         hibernateProperties.setProperty(
                 DIALECT, "org.hibernate.dialect.MySQLDialect");
 

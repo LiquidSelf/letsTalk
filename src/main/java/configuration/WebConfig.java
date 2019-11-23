@@ -1,9 +1,9 @@
 package configuration;
 
-import dto.Greeting;
 import controllers.AngularREST;
-import controllers.BasicController;
 import controllers.GreetingController;
+import dao.Dao;
+import dto.Greeting;
 import filters.ExceptionsManager;
 import filters.JwtRequestFilter;
 import filters.Utf8Filter;
@@ -24,13 +24,13 @@ import java.util.List;
 @PropertySource("classpath:application.properties")
 @EnableWebMvc
 @ComponentScan(basePackageClasses = {
-        BasicController.class,
         GreetingController.class,
         AngularREST.class,
         Greeting.class,
         DatabaseConfig.class,
         JwtTokenUtil.class,
-        JwtRequestFilter.class
+        JwtRequestFilter.class,
+        Dao.class
 })
 @Configuration
 public class WebConfig

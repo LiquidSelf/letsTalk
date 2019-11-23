@@ -13,27 +13,10 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
+                  name: password
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
                   name: age
                   type: int
-
-#  - changeSet:
-#      id: 2
-#      author: nvoxland
-#      changes:
-#        - addColumn:
-#            tableName: person
-#            columns:
-#              - column:
-#                  name: username
-#                  type: varchar(8)
-#
-#  - changeSet:
-#      id: 3
-#      author: nvoxland
-#      changes:
-#        - addLookupTable:
-#            existingTableName: person
-#            existingColumnName: state
-#            newTableName: state
-#            newColumnName: id
-#            newColumnDataType: char(2)
