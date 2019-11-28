@@ -40,7 +40,7 @@ implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
         .addResourceHandler("*.js", "*.css", "*.html")
-        .addResourceLocations("/ng/");
+        .addResourceLocations("/");
     }
 
     @Override

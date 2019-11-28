@@ -19,8 +19,7 @@ public class ExceptionsManager extends AbstractHandlerExceptionResolver {
     ) {
         try {
             if (ex instanceof NoHandlerFoundException) {
-                response.sendRedirect("/");
-                return new ModelAndView();
+                return new ModelAndView("index.html");
             }
         }catch (Exception exce){
             System.out.println(exce.getMessage());
