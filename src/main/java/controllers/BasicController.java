@@ -13,8 +13,4 @@ import java.security.Principal;
 @Controller
 public class BasicController {
 
-    @GetMapping("/")
-    public String ddd(Authentication authentication) {
-        return "index.html";
-    }
 }

@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "build_watch": "ng build --watch --outputPath=../../../target/LetsTalk/",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",

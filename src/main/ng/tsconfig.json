@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "../webapp/chat",
+    "outDir": "../webapp",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,

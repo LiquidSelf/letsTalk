@@ -179,9 +179,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests().anyRequest().permitAll()
                 .and().authorizeRequests().antMatchers("/authenticate").permitAll()
-                .and().formLogin().loginPage("/").loginProcessingUrl("/login")
-                .successHandler(authSuccHandler()).failureHandler(authFailHandler()).permitAll()
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/").logoutSuccessHandler(logoutSuccHandler()).permitAll()
                 .and().authorizeRequests().antMatchers("/api/mee").permitAll()
                 .and().authorizeRequests().antMatchers("/api/**").hasRole("USER")
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

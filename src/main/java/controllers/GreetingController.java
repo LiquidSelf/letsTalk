@@ -28,22 +28,4 @@ public class GreetingController {
         return new Greeting(counter.incrementAndGet(),
                 String.format(template, name));
     }
-
-    @RequestMapping("/hello")
-    public Greeting hello(@RequestParam(value="name", defaultValue="World") String name) {
-        Greeting greeting = new Greeting(1l, "hell-o");
-        return greeting;
-    }
-
-    @RequestMapping(value = "/getUsername")
-    public String g(@RequestParam(value="id", required = true) Long id) {
-        String description = "empty";
-        Session s = sessionFactory.openSession();
-        List result = s.createNativeQuery(
-                "select current_description_ru from inv_book_museum where id = " + id).getResultList();
-        if(result != null && result.size() > 0) description = String.valueOf(result.get(0));
-        System.out.println(description);
-        s.close();
-        return "Description is " + description;
-    }
 }

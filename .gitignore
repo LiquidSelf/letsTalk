@@ -1,6 +1,7 @@
 letsTalk.iml
 src/main/ng/e2e
 src/main/ng/node_modules
+src/main/ng/node
 .DS_Store
 src/main/webapp
 target
