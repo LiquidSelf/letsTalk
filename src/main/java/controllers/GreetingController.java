@@ -35,7 +35,7 @@ public class GreetingController {
         return greeting;
     }
 
-    @RequestMapping(value = "/getName")
+    @RequestMapping(value = "/getUsername")
     public String g(@RequestParam(value="id", required = true) Long id) {
         String description = "empty";
         Session s = sessionFactory.openSession();

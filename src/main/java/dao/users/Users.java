@@ -7,15 +7,16 @@ import java.io.Serializable;
 @Table(name = "users")
 public class Users {
 
-    @Id private String username;
+    @Id @Column(name = "username", nullable = false)
+    private String username;
     @Column(nullable = false) private String password;
     @Column(nullable = true) private Integer age;
 
-    public String getName() {
+    public String getUsername() {
         return username;
     }
 
-    public void setName(String name) {
+    public void setUsername(String name) {
         this.username = name;
     }
 

@@ -8,11 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import services.JwtTokenUtil;
+
+import java.util.*;
+import java.util.function.Consumer;
 
 @RestController
 @CrossOrigin
@@ -38,7 +40,21 @@ public class JWTAuth {
                 )
             );
 
-            final String token = tokenUtil.generateToken(null);
+            Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
+            Set<String> authoritiesSet = new HashSet<String>();
+
+            authorities.forEach(new Consumer<GrantedAuthority>() {
+                @Override
+                public void accept(GrantedAuthority grantedAuthority) {
+                   authoritiesSet.add(grantedAuthority.getAuthority());
+                }
+            });
+
+            //todo переделать роли, не безопасно
+            Map<String, Object> claims = new HashMap<String, Object>();
+            claims.put("roles", authoritiesSet.toArray(new String[authoritiesSet.size()]));
+
+            final String token = tokenUtil.generateToken(claims, auth.getPrincipal().toString());
 
             return ResponseEntity.ok(new JwtResponse(token));
 

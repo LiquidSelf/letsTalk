@@ -6,17 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
 public class DB_DetailService implements UserDetailsManager {
 
-    @Autowired UsersDao usersDao;
+    @Autowired private UsersDao usersDao;
+    @Autowired private PasswordEncoder passEncoder;
 
     @Override
     public void createUser(UserDetails user) {
+        Users db_row = new Users();
+
+        db_row.setUsername(user.getUsername());
+        db_row.setPassword(passEncoder.encode(user.getPassword()));
+
+        usersDao.save(db_row);
     }
 
     @Override
@@ -41,14 +49,14 @@ public class DB_DetailService implements UserDetailsManager {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Users> isIt = usersDao.find(username);
+        Optional<Users> mayBeUser = usersDao.find(username);
 
-        if(!isIt.isPresent()) throw new UsernameNotFoundException("User ["+username+"] not found.");
+        if(!mayBeUser.isPresent()) throw new UsernameNotFoundException("User ["+username+"] not found.");
 
-        Users dbUser = isIt.get();
+        Users dbUser = mayBeUser.get();
 
         return User.builder()
-                .username(dbUser.getName())
+                .username(dbUser.getUsername())
                 .password(dbUser.getPassword())
                 .roles("USER")
                 .build();

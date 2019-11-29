@@ -62,7 +62,7 @@ public class AnnotationsBasedApplicationInitializer
 //        characterEncodingFilter.setEncoding("UTF-8");
 //        characterEncodingFilter.setForceEncoding(true);
 //
-//        FilterRegistration.Dynamic registration = servletContext.addFilter(CharacterEncodingFilter.class.getName(), characterEncodingFilter);
+//        FilterRegistration.Dynamic registration = servletContext.addFilter(CharacterEncodingFilter.class.getUsername(), characterEncodingFilter);
 //
 //        registration.addMappingForUrlPatterns(null, true, "/*");
     }
