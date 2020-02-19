@@ -1,23 +1,18 @@
-.chat_chat{
+#chat_chat{
   width: 400px;
   height: 450px;
   background: #688580;
   border: solid black 1px;
-  padding: 5px;
   display: inline-flex;
   flex-direction: column;
   justify-content: space-between;
   opacity: 0.95;
+  position: relative;
 }
 
-.chat_chat .chat_title{
-  width:100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.chat_chat .chat_messages{
+
+#chat_holder #chat_messages{
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -25,10 +20,11 @@
   height: 100%;
   border: solid #b5d6e2 1px;
   border-radius: 5px;
+  scroll-behavior: smooth;
 }
 
 
-.chat_chat .message{
+#chat_holder .message{
   background: #ecfff0;
   border:solid #d6d6d6 1px;
   height: fit-content;
@@ -38,7 +34,7 @@
   margin: 2px;
 }
 
-.chat_chat .message .login{
+#chat_holder .message #login{
   min-width: fit-content;
   margin: 7px;
   align-self: flex-start;
@@ -47,12 +43,12 @@
   font-size: medium;
 }
 
-.chat_chat .message .text{
+#chat_holder .message #text{
   color: #1b1b1b;
   text-align: left;
 }
 
-.chat_chat .message span{
+#chat_holder .message span{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -61,28 +57,110 @@
   direction: ltr;
 }
 
-.chat_chat .my_message{
+#chat_chat .my_message{
   direction: rtl;
   background: white;
   align-self: flex-end;
 }
-.chat_chat .input_text{
+#chat_chat #input_text{
   bottom:0px;
   left:0px;
   width:100%;
   display: flex;
 }
 
-.chat_chat .input_text input{
+#chat_holder #input_text input{
   width:100%;
   box-sizing: border-box;
 }
 
-.userName{
+#userName{
   font-style: italic;
   letter-spacing: -1px;
 }
 
-.chat_holder .loading{
+#chat_holder #chat_title{
+  width:100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #3f494af2;
+  border: solid black 1px;
+  border-bottom: none;
+}
+
+#chat_holder #chat_title #text{
+  width: 100px;
+  background: #3f494af2;
+  text-align: center;
+  color: white;
+  user-select: none;
+  cursor: pointer;
+}
+
+#chat_holder{
+  position: absolute;
+  right: 1px;
+  bottom: 0px;
+  box-shadow: -3px 1px 4px 0px #00000036;
+}
+
+#chat_holder #disconnected{
+  z-index: 100;
+  height: 100%;
+  background: #000000b3;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 5;
+}
+
+#chat_holder #disconnected_value{
+  user-select: none;
+  font-size: 140%;
+  color: #ffffff;
   opacity: 0.8;
+}
+#chat_holder #reconnect_button{
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#chat_holder .chat_shown#unread_counter{
+  background: #758c8e !important;
+  position: absolute !important;
+  top: auto !important;
+  left: auto !important;
+  right: 6%;
+  bottom: 10%;
+  z-index: 1;
+  width: 90px !important;
+  text-align: left !important;
+  font-size: 14px;
+}
+
+#chat_holder #unread_counter{
+  position: absolute;
+  left: -6px;
+  top: -7px;
+  background: #e41414d6;
+  border: solid #9a9a9a 1px;
+  border-radius: 50px;
+  color: white;
+  font-size: 12px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  width: 26px;
+  height: 25px;
+  user-select: none;
+  cursor: pointer;
 }

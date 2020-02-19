@@ -1,54 +1,49 @@
 package dao.users;
 
-import com.sun.istack.NotNull;
 import dao.Dao;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import services.UsersValidation_Service;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
-import java.util.Optional;
 
-@Service
-public class UsersDao implements Dao<Users, String> {
+@Repository
+public class UsersDao implements Dao<DB_USER, String> {
 
-    @Autowired
-    private UsersValidation_Service validate;
 
-    @Autowired
-    private SessionFactory sessionFactory;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
-    public Optional<Users> find(@NotNull String username) {
-
-        Users user = sessionFactory.openSession().find(Users.class, username);
-        return Optional.ofNullable(user);
+    public DB_USER find(@NonNull String username) {
+        DB_USER user = entityManager.find(DB_USER.class, username);
+        return user;
     }
 
     @Override
-    public List<Users> getAll() {
-        return sessionFactory
-                .openSession()
+    public List<DB_USER> getAll() {
+        return entityManager
                 .createQuery("from Users")
                 .getResultList();
     }
 
     @Override
-    public void save(Users user) {
-        validate.assertUsersBase(user);
-        sessionFactory.openStatelessSession().insert(user);
+    @Transactional(rollbackFor = Exception.class)
+    public void save(@NonNull DB_USER user) {
+        entityManager.merge(user);
     }
 
     @Override
-    public void update(Users user) {
-        validate.assertUsersBase(user);
-        sessionFactory.openSession().update(user);
+    @Transactional(rollbackFor = Exception.class)
+    public void update(@NonNull DB_USER user) {
+        entityManager.merge(user);
     }
 
     @Override
-    public void delete(Users user) {
-        validate.assertUsersBase(user);
-        sessionFactory.openSession().delete(user);
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(@NonNull DB_USER user) {
+        entityManager.remove(user);
     }
 }

@@ -1,21 +1,30 @@
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { MessagingService } from '../messaging.service';
+import {MessagingService, MessListener} from '../messaging.service';
 import { Component, AfterViewChecked, ElementRef, ViewChild, OnInit} from '@angular/core'
 import { AuthService } from "../auth.service";
-
+import {AppMessageService, MessageColor} from "../app-message.service";
+import {Message} from "./Message";
 
 @Component({
   selector: 'app-chat-page',
   templateUrl: './chat-page.component.html',
   styleUrls: ['./chat-page.component.css']
 })
-export class ChatPageComponent implements OnInit {
+export class ChatPageComponent implements OnInit, MessListener{
 
   @ViewChild('scroll', {static: false})
   private myScrollContainer: ElementRef;
 
+  @ViewChild('textField', {static: false})
+  private textField: ElementRef;
+
+  private messages  : Message[] = [];
+
   private message:string;
+  private isShown: boolean;
+  private isAutoScroll: boolean = true;
+  private unreadMessages:Message[] = [];
 
   constructor
   (
@@ -23,59 +32,74 @@ export class ChatPageComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private mess_serv: MessagingService,
+    private appMess: AppMessageService,
   )
   {
-
-     let callback = {
-       next:(tiket:string) => this.initConnection(tiket),
-       error:(error:any)   => this.handleError(error)
-     }
-
-     if(auth.getSub())
-     this.auth.wsTempTiket(callback)
-     else
-     location.back();
-  }
-
-  initConnection(tiket:string){
-    if(!tiket || tiket === 'null'){
-      this.handleError(null)
-      return;
-    }
-    else
-    this.mess_serv.init(tiket);
-  }
-
-  handleError(error){
-    if(error && error.status === 403){
-      console.log("$)$))$)343")
-    }
   }
 
   ngOnInit() {
-    this.scrollToBottom();
+    this.mess_serv.addMessListener(this);
   }
 
-  ngAfterViewChecked() {
-    this.scrollToBottom();
+  onUnreadClick(){
+    if(!this.isShown){
+      this.togleChat();
+    }
+    else this.scrollToBottom();
   }
 
   scrollToBottom(): void {
     try {
-      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
-    } catch(err) { }
-  }
-
-  goBack(): void {
-    this.location.back();
-    this.mess_serv.closeWs();
+      window.setTimeout(
+        ()=>{
+          if(this.myScrollContainer && this.myScrollContainer.nativeElement)
+            this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;},
+        30);
+    } catch(err) {}
   }
 
   sendMessage(message:string): void{
     if(message){
-        this.mess_serv.sendMessage(message);
-        this.message = '';
+      this.mess_serv.sendMessage(message);
+      this.message = '';
     }
   }
 
+  onScroll(){
+    let element = this.myScrollContainer.nativeElement;
+
+    if(Math.abs(element.scrollHeight - element.scrollTop - element.clientHeight) <= 15.0){
+      this.unreadMessages = [];
+      this.isAutoScroll = true;
+    }else {
+      this.isAutoScroll = false;
+    }
+  }
+
+  onMessage(mess: Message[] | Message, async:boolean): void {
+    if(!mess) return;
+
+    if(!async) {
+      this.messages = [];
+      this.unreadMessages = [];
+    }
+
+    this.messages = this.messages.concat(mess);
+
+    if(this.isAutoScroll && this.isShown) this.scrollToBottom();
+    if(!this.isShown || !this.isAutoScroll){
+      this.unreadMessages = this.unreadMessages.concat(mess);
+    }
+  }
+
+  togleChat(){
+    this.isShown = !this.isShown;
+    if(this.isShown){
+      this.isAutoScroll = true;
+      this.scrollToBottom();
+      window.setTimeout(()=>{this.textField.nativeElement.focus()}, 500);
+    }else{
+      this.isAutoScroll = false;
+    }
+  }
 }

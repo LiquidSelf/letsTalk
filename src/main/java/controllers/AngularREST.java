@@ -1,9 +1,13 @@
 package controllers;
 
+import dto.Message;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import services.ws.WSHandler;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")

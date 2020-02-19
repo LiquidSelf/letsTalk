@@ -1,7 +1,10 @@
 package controllers;
 
-import dto.JwtRequest;
-import dto.JwtResponse;
+import dto.DTO;
+import dto.users.UsersDTO;
+import dto.users.auth.AuthRequest;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 import services.JwtTokenUtil;
 
@@ -19,17 +21,16 @@ import java.util.function.Consumer;
 @RestController
 @CrossOrigin
 public class JWTAuth {
+    private static final Log logger = LogFactory.getLog(JWTAuth.class);
 
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtTokenUtil tokenUtil;
-    @Autowired
-    private UserDetailsService userDetailsService;
 
     @RequestMapping(value = "/authenticate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(
-            @RequestBody JwtRequest authenticationRequest
+            @RequestBody AuthRequest authenticationRequest
     ) throws Exception {
 
         try {
@@ -40,27 +41,15 @@ public class JWTAuth {
                 )
             );
 
-            Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-            Set<String> authoritiesSet = new HashSet<String>();
+            UsersDTO authenticated = (UsersDTO) auth.getPrincipal();
 
-            authorities.forEach(new Consumer<GrantedAuthority>() {
-                @Override
-                public void accept(GrantedAuthority grantedAuthority) {
-                   authoritiesSet.add(grantedAuthority.getAuthority());
-                }
-            });
+            final String token = tokenUtil.generateToken(authenticated);
 
-            //todo переделать роли, не безопасно
-            Map<String, Object> claims = new HashMap<String, Object>();
-            claims.put("roles", authoritiesSet.toArray(new String[authoritiesSet.size()]));
-
-            final String token = tokenUtil.generateToken(claims, auth.getPrincipal().toString());
-
-            return ResponseEntity.ok(new JwtResponse(token));
+            return ResponseEntity.ok(DTO.mk(token));
 
         } catch (Exception e) {
+            logger.info(e);
             return new ResponseEntity(e, HttpStatus.UNAUTHORIZED);
         }
     }
-
 }

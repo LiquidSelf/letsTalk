@@ -2,7 +2,6 @@ package filters;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import services.JwtTokenUtil;
@@ -18,8 +17,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtTokenUtil tokenUtil;
-    @Autowired
-    private UserDetailsService detailsService;
 
     @Override
     protected void doFilterInternal(

@@ -1,11 +1,12 @@
-<h1 mat-dialog-title>Hi {{data.username}}</h1>
+<h1 mat-dialog-title>Hi {{data.username}}!</h1>
 <div mat-dialog-content>
-  <p>What's your favorite animal?</p>
+  <p>How old are you?</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.age">
+    <input matInput type="number" [(ngModel)]="data.age"
+           onkeydown="return (event.keyCode !== 69 && event.keyCode !== 190 && event.keyCode !== 188)">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">No Thanks</button>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="onOkClick()" cdkFocusInitial>Ok</button>
 </div>

@@ -1,23 +1,23 @@
 package dto;
 
 public class Message {
-    private String message;
+    private String text;
     private String username;
 
     public Message(){
     }
 
-    public Message(String message, String userName) {
-        this.message = message;
+    public Message(String text, String userName) {
+        this.text = text;
         this.username = userName;
     }
 
-    public String getMessage() {
-        return message;
+    public String getText() {
+        return text;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public String getUsername() {

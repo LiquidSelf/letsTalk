@@ -1,5 +1,11 @@
 <div id = "top-bar">
-  <div (click)="editProfile()">{{auth.getSub()}}</div>
-  <div>_</div>
-  <div (click)="auth.logout()" id="logout_button">logout→</div>
+  <div id="profile_holder">
+    <div id="profile_button" class="has_action" (click)="editProfile()">{{auth.user ? auth.user.username : 'unauthorized'}}</div>
+  </div>
+  <div id="title_holder">
+    <div id="title">_</div>
+  </div>
+  <div id="logout_holder">
+    <div *ngIf="auth.user" (click)="auth.logout()" class="has_action" id="logout_button">logout→</div>
+  </div>
 </div>

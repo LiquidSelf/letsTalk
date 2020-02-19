@@ -20,3 +20,15 @@ databaseChangeLog:
               - column:
                   name: age
                   type: int
+              - column:
+                  name: account_non_expired
+                  type: boolean
+              - column:
+                  name: account_non_locked
+                  type: boolean
+              - column:
+                  name: credentials_non_expired
+                  type: boolean
+              - column:
+                  name: enabled
+                  type: boolean

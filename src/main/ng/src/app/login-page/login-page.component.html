@@ -1,17 +1,19 @@
-<div class="login_form_container">
+<div id="login_form_container">
+  <form role="form" novalidate (ngSubmit)="onSubmit()" id="login_form">
+    <div class="form-group">
+      <label for="username">Username:</label> <input type="text"
+                                                     class="form-control" id="username" name="username"
+                                                     [(ngModel)]="credentials.username"/>
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label> <input type="password"
+                                                     class="form-control" id="password" name="password"
+                                                     [(ngModel)]="credentials.password"/>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
 
-<form role="form" novalidate (ngSubmit)="onSubmit()" class="login_form">
-  <div *ngIf="auth.error" class="alert alert-danger" >
-    {{auth.error.error.message}}
+  <div id="registration_link">
+    <div>No account yet? <span><a routerLink="/registration">Wellcome</a></span>!</div>
   </div>
-  <div class="form-group">
-    <label for="username">Username:</label> <input type="text"
-      class="form-control" id="username" name="username" [(ngModel)]="credentials.username"/>
-  </div>
-  <div class="form-group">
-    <label for="password">Password:</label> <input type="password"
-       class="form-control" id="password" name="password" [(ngModel)]="credentials.password"/>
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form>
 </div>

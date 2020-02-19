@@ -1,0 +1,48 @@
+<div id="whole_page">
+  <div id = "reg_form_container">
+    <form [formGroup]="userForm" role="form" novalidate (ngSubmit)="onSubmit()" id="reg_form">
+
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="search"
+               class="form-control"
+               formControlName="username"
+               id="username"
+               placeholder="Your login"
+               name="username"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password"
+               class="form-control"
+               formControlName="password"
+               autocomplete="new-password"
+               id="password"
+               placeholder="Your password"
+               name="password"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="passRepeat">Repeat:</label>
+        <input
+          type="password"
+          class="form-control"
+          formControlName="passRepeat"
+          autocomplete="new-password"
+          id="passRepeat"
+          placeholder="Say it again"
+          name="passRepeat"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <div id = "back_link">
+      <div>Already got an account?
+        <span><a routerLink="/wellcome">login</a></span> please.</div>
+    </div>
+  </div>
+</div>

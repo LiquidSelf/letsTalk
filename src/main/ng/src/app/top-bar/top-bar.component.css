@@ -14,7 +14,6 @@
 }
 
 #top-bar>div{
-  padding: 0px 10px 0px 10px;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -24,3 +23,19 @@
 #top-bar>#logout_button:hover{
   background: #0000002e;
 }
+
+.has_action{
+  height: 100%;
+  padding: 0px 20px 0px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+
+.has_action:hover{
+  background: #37383d7a;
+}
+
+

@@ -8,15 +8,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.util.StringUtils;
 
 public class JwtAuthProvider extends AbstractUserDetailsAuthenticationProvider {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsManager userDetailsManager;
 
     @Autowired
     private PasswordEncoder passEncoder;
@@ -36,18 +36,18 @@ public class JwtAuthProvider extends AbstractUserDetailsAuthenticationProvider {
             String login    = String.valueOf(principal);
             String password = String.valueOf(creds);
 
-            UserDetails dbUser = null;
+            UserDetails authenticated = null;
 
             try {
-                dbUser = userDetailsService.loadUserByUsername(login);
+                authenticated = userDetailsManager.loadUserByUsername(login);
             }catch (UsernameNotFoundException ex){
                 throw new BadCredentialsException(ex.getMessage());
             }
 
-            if(dbUser != null && passEncoder.matches(password, dbUser.getPassword()))
-                return createSuccessAuthentication(principal, authentication, dbUser);
+            if(passEncoder.matches(password, authenticated.getPassword()))
+                return createSuccessAuthentication(authenticated, authentication, authenticated);
             else
-                return null;
+                throw new BadCredentialsException("wrong pass"); //todo
     }
 
     @Override

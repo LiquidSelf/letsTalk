@@ -1,0 +1,7 @@
+<div class="message_itself"
+     [ngClass]="msg._color"
+     @insertRemove (click)="removeMe()"
+     (mouseenter)="hover(true)"
+     (mouseleave)="hover(false)">
+  <span [innerHTML]="msg._value"></span>
+</div>

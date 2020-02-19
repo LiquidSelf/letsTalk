@@ -6,17 +6,21 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import dto.users.UsersDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.NonNull;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+import org.springframework.web.client.HttpClientErrorException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -24,17 +28,14 @@ import java.util.function.Consumer;
 public class JwtTokenUtil implements Serializable {
     private static final long serialVersionUID = -2550185165626007488L;
     //seconds
-    public static final long JWT_TOKEN_EXPIRATION = 60 * 30;
+    public static final long JWT_TOKEN_EXPIRATION = 3000;
     public static final String AUTH_HEADER = "Authorization";
-
-    @Autowired
-    private UsersValidation_Service validate;
 
     @Value("${jwt.secret}")
     private String secret;
 
     public String getUsernameFromToken(String token) {
-        return JWT.decode(token).getSubject();
+        return JWT.decode(token).getClaim("username").asString();
     }
 
     public Date getExpirationDateFromToken(String token) {
@@ -50,17 +51,39 @@ public class JwtTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
 
-    public String generateToken(Map<String, Object> claims, String userName) {
-        Assert.notNull(userName, "cant generate token for null username");
-        return doGenerateToken(null, userName);
+    public String generateToken(@NonNull UsersDTO dto){
+        if(dto == null || StringUtils.isEmpty(dto.getUsername()))
+        throw new JWTCreationException(String.format("exception on token generation: from null"), null);
+
+        Set<String> authoritiesSet = new HashSet<String>();
+
+        if(dto.getAuthorities() != null)
+            dto.getAuthorities().forEach(new Consumer<GrantedAuthority>() {
+                @Override
+                public void accept(GrantedAuthority grantedAuthority) {
+                    authoritiesSet.add(grantedAuthority.getAuthority());
+                }
+            });
+
+        Map<String, Object> claims = new HashMap<String, Object>();
+        claims.put("username", dto.getUsername());
+        claims.put("age", dto.getAge());
+        claims.put("authorities", authoritiesSet.toArray(new String[authoritiesSet.size()]));
+        claims.put("accountNonExpired", dto.isAccountNonExpired());
+        claims.put("accountNonLocked", dto.isAccountNonLocked());
+        claims.put("credentialsNonExpired", dto.isCredentialsNonExpired());
+        claims.put("enabled", dto.isEnabled());
+
+        final String token = generateToken(claims);
+
+        return token;
     }
 
-    public String generateToken(Map<String, Object> claims, UserDetails userDetails) {
-        validate.assertUsersBase(userDetails);
-        return doGenerateToken(claims, userDetails.getUsername());
+    public String generateToken(Map<String, Object> claims) {
+        return doGenerateToken(claims);
     }
 
-    private String doGenerateToken(Map<String, Object> claims, String subject) {
+    private String doGenerateToken(Map<String, Object> claims) {
 
         JWTCreator.Builder builder = JWT.create();
 
@@ -75,6 +98,7 @@ public class JwtTokenUtil implements Serializable {
                     else if(value instanceof Long    ) builder.withClaim(name, (Long   ) value);
                     else if(value instanceof Integer ) builder.withClaim(name, (Integer) value);
                     else if(value instanceof Date    ) builder.withClaim(name, (Date   ) value);
+                    else if(value instanceof Boolean ) builder.withClaim(name, (Boolean) value);
 
                     else if(value instanceof Long    []) builder.withArrayClaim(name, (Long   []) value);
                     else if(value instanceof Integer []) builder.withArrayClaim(name, (Integer[]) value);
@@ -86,18 +110,20 @@ public class JwtTokenUtil implements Serializable {
                 }
             });
         }
+
         return builder.
-                withSubject(subject).
                 withIssuedAt(new Date(System.currentTimeMillis())).
                 withExpiresAt(new Date(System.currentTimeMillis() + JWT_TOKEN_EXPIRATION * 1000)).
                 sign(Algorithm.HMAC512(secret));
     }
 
     public void validateToken(String token) throws JWTVerificationException {
+        if(StringUtils.isEmpty(token)) throw new JWTVerificationException("token is empty");
         JWT.require(Algorithm.HMAC512(secret)).build().verify(token);
     }
 
     public boolean isVld(String token){
+        if(token == null) return false;
         try {
             validateToken(token);
             return true;
@@ -107,7 +133,7 @@ public class JwtTokenUtil implements Serializable {
         }
     }
 
-    public String getTokenFromRequest(HttpServletRequest request){
+    public String getTokenFromRequest(@NonNull HttpServletRequest request){
         try{
             return request.getHeader(AUTH_HEADER).replaceFirst("Bearer ","");
         }catch (Exception ex){

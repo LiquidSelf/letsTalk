@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "build_watch": "ng build --watch --outputPath=../../../target/LetsTalk/",
+    "build_watch": "ng build --watch --outputPath=../../../target/LetsTalk/ --deleteOutputPath=false",
+    "build_watch_debug": "node $NODE_DEBUG_OPTION ./node_modules/@angular/cli/bin/ng build --watch --outputPath=../../../target/LetsTalk/ --deleteOutputPath=false",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
@@ -25,13 +26,15 @@
     "hammerjs": "^2.0.8",
     "rxjs": "~6.4.0",
     "tslib": "^1.9.0",
+    "videogular2": "^7.0.1",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.801.3",
+    "@angular-devkit/build-angular": "^0.900.2",
     "@angular/cli": "~8.1.1",
     "@angular/compiler-cli": "~8.1.1",
     "@angular/language-service": "~8.1.1",
+    "@types/core-js": "^2.5.3",
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",

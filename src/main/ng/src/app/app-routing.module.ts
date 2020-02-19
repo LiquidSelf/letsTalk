@@ -7,11 +7,13 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
+import {RegistrationPageComponent} from "./registration-page/registration-page.component";
 
 const routes: Routes = [
   {path: 'chat', component: ChatPageComponent},
   {path: 'wellcome', component: WellcomePageComponent},
   {path: 'login', component: LoginPageComponent},
+  {path: 'registration', component: RegistrationPageComponent},
   {path: '', redirectTo: 'wellcome', pathMatch: 'full' }
 ];
 

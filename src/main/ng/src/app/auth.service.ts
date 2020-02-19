@@ -2,7 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpParams} from '@angular/common/http' ;
 import { Router } from '@angular/router';
-import {UserProfileDTO} from "./top-bar/UserProfileDTO";
+import {UsersDTO} from "./dto/users/UsersDTO";
+import {LoginPageComponent} from "./login-page/login-page.component";
+import {RegistrationPageComponent} from "./registration-page/registration-page.component";
+import { AppMessageService } from "./app-message.service";
+import { FriendlyMessage } from "./app-message.service";
+import {DTO} from "./dto/DTO";
 
 @Injectable({
   providedIn: 'root'
@@ -10,85 +15,122 @@ import {UserProfileDTO} from "./top-bar/UserProfileDTO";
 export class AuthService {
 
   private static USER_TOKEN:string = "saved_token";
-
-  error:any = null;
+  private _user:UsersDTO;
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private appMsg: AppMessageService,
   ) {
+    this.putToken(this.getToken());
   }
 
-  authenticate(credentials) {
+  authenticate(credentials, errorCallback:(msg:string) => void) {
 
     let headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    this.http.post<any>(
+    this.http.post<DTO>(
       "/authenticate",
       credentials,
       {
         headers:headers
       }
     ).subscribe(
-      (next)=>{
-        this.putToken(next.token);
-        this.router.navigateByUrl('/wellcome');
-        this.error = null;
+      (next:DTO)=>{
+        this.putToken(next.data);
       },
       (error) => {
         this.putToken(null);
-        this.router.navigateByUrl('/login?error=1');
-        this.error = error;
+        if(error && error.error && error.error.message)
+          errorCallback(error.error.message);
+        else
+          errorCallback(null);
       }
       );
   }
 
-  parseJwt (token) {
+  registrate(newCredentials, callback:(msg:string) => void){
+      let headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+      });
+
+      this.http.post<DTO>(
+        "/registration",
+        newCredentials,
+        {
+          headers:headers,
+        }
+      ).subscribe(
+        (next:DTO)=>{
+          this.router.navigateByUrl('/wellcome');
+        },
+        (error) => {
+          this.router.navigateByUrl('/registration');
+          if(callback) {
+            if (error && error.error && error.error.message)
+              callback(error.error.message);
+            else
+              callback(null)
+          }
+        }
+      );
+  }
+
+  updateUser(updateMe:UsersDTO, callback:(success:boolean, errorMsg?:string) => void){
+
+    this.http.post<DTO>(
+      "/api/users/",
+      updateMe,
+    ).subscribe(
+      (next:DTO)=>{
+        if(next) this.putToken(next.data);
+        if(!callback) return;
+        callback(true);
+      },
+      (error) => {
+        if(!callback) return;
+        callback(false, error.error.message);
+      }
+    );
+  }
+
+  parseJwt (token):UsersDTO {
+    if(!token) return null;
+
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
       return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
 
-    return JSON.parse(jsonPayload);
+    let user:UsersDTO = JSON.parse(jsonPayload);
+    console.log('parseJwt', user);
+    return user;
   };
 
   logout(){
-    let func = ()=>{
-      this.putToken(null)
-      this.router.navigateByUrl('/login');
-    }
-
-    func();
+    this.putToken(null);
   }
 
-  getSub():string{
-    if(!this.getToken()) return null;
-    let decoded = this.parseJwt(this.getToken());
-    return decoded.sub;
+  get user(): UsersDTO {
+    return this._user;
   }
 
-
-  getUser():UserProfileDTO{
-    this.http.get('/api/');
-    return null;
+  set user(value: UsersDTO) {
+    this._user = value;
   }
 
-  private putToken(token:string){
+  public putToken(token:string, callback?:() => void){
      localStorage.setItem(AuthService.USER_TOKEN, token);
+     this.user = this.parseJwt(token);
+     if(callback) callback();
   }
 
   getToken():string{
     let token = localStorage.getItem(AuthService.USER_TOKEN);
     if(!token || token === "null") return null;
     return token;
-  }
-
-  wsTempTiket(callback){
-    this.http.get('/api/chat/ws_tiket',
-      {responseType: 'text'}
-    ).subscribe(callback);
   }
 }

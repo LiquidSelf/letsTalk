@@ -10,10 +10,12 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { AuthService } from "./auth.service";
 import { tap, map, catchError } from 'rxjs/operators';
+import {AppMessageService, MessageColor} from "./app-message.service";
 @Injectable()
 export class TokenInterseptor implements HttpInterceptor {
 
-  constructor(public auth: AuthService) {}
+  constructor(private auth: AuthService,
+              private appMess: AppMessageService) {}
   intercept(req: HttpRequest<any>, next: HttpHandler):
   Observable<HttpEvent<any>>
   {
@@ -33,7 +35,7 @@ export class TokenInterseptor implements HttpInterceptor {
           } else {
             // server-side error
             if(error.status === 403){
-              this.auth.logout();
+              this.auth.putToken(null);
             }
             errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
           }

@@ -7,7 +7,7 @@ import { AuthService } from "../auth.service";
 import { WellcomePageComponent } from "../wellcome-page/wellcome-page.component";
 import { MatDialog } from '@angular/material/dialog';
 import { UserCabinetComponent } from "../user-cabinet/user-cabinet.component";
-import { UserProfileDTO } from "./UserProfileDTO";
+import { UsersDTO } from "../dto/users/UsersDTO";
 
 @Component({
   selector: 'app-top-bar',
@@ -31,13 +31,13 @@ export class TopBarComponent implements OnInit {
   }
 
   editProfile(){
-    const dialog = this.dialog.open(UserCabinetComponent, {
-      width: '250px',
-      data: new UserProfileDTO("test", 23)
-    });
+    if(!this.auth.user) return;
 
-    dialog.afterClosed().subscribe(result=>{
-      console.log(result);
+    let dialogObject = {...this.auth.user};
+
+    const dialog = this.dialog.open(UserCabinetComponent, {
+      width: '500px',
+      data: dialogObject
     });
   }
 }

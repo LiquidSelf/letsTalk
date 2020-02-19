@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public interface Dao<T, ID_TYPE> {
 
-    Optional<T> find(ID_TYPE id);
+    T find(ID_TYPE id);
 
     List<T> getAll();
 

@@ -1,9 +1,9 @@
 export class Message{
-  message: string;
+  text: string;
   username: string;
 
-  constructor(message: string, username:string) {
-    this.message = message;
+  constructor(text: string, username?:string) {
+    this.text = text;
     this.username = username;
   }
 }

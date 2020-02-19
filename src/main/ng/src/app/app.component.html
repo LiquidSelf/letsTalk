@@ -1,1 +1,7 @@
   <router-outlet></router-outlet>
+  <div id = "message_holder">
+    <div *ngFor="let msg of appMsgs._msgs, let i = index">
+      <app-friendly-messages [msg]="msg" [index]="i"></app-friendly-messages>
+    </div>
+
+  </div>

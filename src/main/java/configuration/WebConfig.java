@@ -1,7 +1,6 @@
 package configuration;
 
 import controllers.AngularREST;
-import controllers.GreetingController;
 import dao.Dao;
 import dto.Greeting;
 import filters.ExceptionsManager;
@@ -24,7 +23,6 @@ import java.util.List;
 @PropertySource("classpath:application.properties")
 @EnableWebMvc
 @ComponentScan(basePackageClasses = {
-        GreetingController.class,
         AngularREST.class,
         Greeting.class,
         DatabaseConfig.class,

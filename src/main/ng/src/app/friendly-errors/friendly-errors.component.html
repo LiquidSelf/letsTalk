@@ -1,7 +1,0 @@
-<div id = "errors_holder">
-  <div *ngFor="let msg of appErrs._msgs, let i = index"
-       class="error_mesage"
-       @insertRemove (click)="removeMe(i)"
-       (mouseenter)="hover(true)"
-       (mouseleave)="hover(false)"><span>{{msg._value}}</span></div>
-</div>

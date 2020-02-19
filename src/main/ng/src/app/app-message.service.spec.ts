@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AppErrorsService } from './app-errors.service';
+import { AppMessageService } from './app-message.service';
 
-describe('AppErrorsService', () => {
+describe('AppMessageService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: AppErrorsService = TestBed.get(AppErrorsService);
+    const service: AppMessageService = TestBed.get(AppMessageService);
     expect(service).toBeTruthy();
   });
 });

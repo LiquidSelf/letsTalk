@@ -1,19 +1,39 @@
-<div class="chat_holder">
-  <div *ngIf="mess_serv.connected" class="chat_chat">
-    <span class="chat_title">chat</span>
-    <span #scroll class="chat_messages">
-      <div *ngFor="let message of mess_serv.messages" [class.my_message]="message.username === auth.getSub()" class="message">
-      <span class="userName">
-        {{message.username === auth.getSub() ? ':' : ''}}
-        {{message.username}}
-        {{message.username === auth.getSub() ? '' : ':'}}
-      </span>
-      <span class="text">{{message.message}}</span>
-      </div>
-    </span>
-    <span class="input_text">
-      <input [(ngModel)]="message" (keyup.enter) = "sendMessage(message)" type="text" autofocus>
-      <button (click)="sendMessage(message) " class="btn btn-primary">snd</button>
-    </span>
+<div id="chat_holder">
+
+  <div id="chat_title" (click)="togleChat()">
+    <span id="text">chat</span>
   </div>
+
+  <span id="unread_counter"
+        *ngIf="unreadMessages.length && mess_serv.isConnected()"
+        [class.chat_shown]="isShown"
+        (click)="onUnreadClick(message)">
+      {{unreadMessages.length > 999 ? '999+' : unreadMessages.length}} {{isShown ? 'new' : ''}}
+  </span>
+
+  <div *ngIf="isShown" id="chat_chat">
+    <div *ngIf="!mess_serv.isConnected()" id="disconnected">
+      <div id="disconnected_value">
+        connecting...
+      </div>
+    </div>
+
+    <span #scroll id="chat_messages" (scroll)="onScroll()">
+      <div *ngFor="let message of messages" [class.my_message]="auth.user && message.username === auth.user.username"
+           class="message">
+          <span id="userName">
+            {{auth.user && message.username === auth.user.username ? ':' : ''}}
+            {{message.username}}
+            {{auth.user && message.username === auth.user.username ? '' : ':'}}
+          </span>
+          <span id="text">{{message.text}}</span>
+      </div>
+      </span>
+    <span id="input_text">
+        <input #textField [(ngModel)]="message" [disabled]="!mess_serv.isConnected()" (keyup.enter)="sendMessage(message)"
+               type="text" autofocus>
+        <button (click)="sendMessage(message) " id="btn btn-primary">snd</button>
+      </span>
+  </div>
+
 </div>

@@ -1,0 +1,31 @@
+#whole_page{
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  position: absolute;
+  background: #e4e4e4;
+}
+
+#reg_form_container{
+  width: 360px;
+  background: #fbfbfb;
+  border: solid gainsboro 1px;
+  padding: 21px;
+}
+
+#back_link{
+  padding-top: 10px;
+  font-size: 0.9rem;
+  text-align: right;
+  opacity: 0.7;
+}
+
+
+.form-control.ng-invalid.ng-touched {
+  background: #ff000014;
+}
