@@ -7,7 +7,7 @@
   <span id="unread_counter"
         *ngIf="unreadMessages.length && mess_serv.isConnected()"
         [class.chat_shown]="isShown"
-        (click)="onUnreadClick(message)">
+        (click)="onUnreadClick()">
       {{unreadMessages.length > 999 ? '999+' : unreadMessages.length}} {{isShown ? 'new' : ''}}
   </span>
 

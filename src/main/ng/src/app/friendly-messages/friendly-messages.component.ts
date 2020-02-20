@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Renderer } from '@angular/core';
+import { Renderer2 } from '@angular/core';
 import {AppMessageService, FriendlyMessage} from "../app-message.service";
 import {
   trigger,
@@ -29,14 +29,14 @@ import {
 export class FriendlyMessagesComponent implements OnInit {
 
   @Input()
-  msg: FriendlyMessage;
+  public msg: FriendlyMessage;
   @Input()
-  index: number;
+  public index: number;
 
   private _intervalId: number;
   private time:number = 0;
 
-  constructor(private appMsgs: AppMessageService) {
+  constructor(public appMsgs: AppMessageService) {
   }
 
   ngOnInit() {

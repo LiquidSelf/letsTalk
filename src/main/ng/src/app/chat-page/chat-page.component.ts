@@ -13,26 +13,26 @@ import {Message} from "./Message";
 })
 export class ChatPageComponent implements OnInit, MessListener{
 
-  @ViewChild('scroll', {static: false})
-  private myScrollContainer: ElementRef;
+  @ViewChild('scroll')
+  public myScrollContainer: ElementRef;
 
-  @ViewChild('textField', {static: false})
-  private textField: ElementRef;
+  @ViewChild('textField')
+  public textField: ElementRef;
 
-  private messages  : Message[] = [];
+  public messages  : Message[] = [];
 
-  private message:string;
-  private isShown: boolean;
-  private isAutoScroll: boolean = true;
-  private unreadMessages:Message[] = [];
+  public message:string;
+  public isShown: boolean;
+  public isAutoScroll: boolean = true;
+  public unreadMessages:Message[] = [];
 
   constructor
   (
-    private auth: AuthService,
+    public auth: AuthService,
     private route: ActivatedRoute,
     private location: Location,
-    private mess_serv: MessagingService,
-    private appMess: AppMessageService,
+    public mess_serv: MessagingService,
+    public appMess: AppMessageService,
   )
   {
   }

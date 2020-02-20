@@ -1,8 +1,6 @@
 package security;
 
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dto.Message;
 import filters.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -22,6 +20,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import security.auth.DB_DetailService;
 import security.auth.JwtAuthProvider;
 
@@ -46,6 +45,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     ObjectMapper jackson(){
         ObjectMapper mapper = new ObjectMapper();
         return mapper;
+    }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+        multipartResolver.setMaxUploadSize(-1);
+        return multipartResolver;
     }
 
     @Bean

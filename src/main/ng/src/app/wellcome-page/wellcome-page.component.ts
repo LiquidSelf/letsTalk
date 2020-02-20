@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { AuthService } from "../auth.service";
 import { AppMessageService } from "../app-message.service";
 import { FriendlyMessage } from "../app-message.service";
-
+import { VgAPI } from 'ngx-videogular';
 
 @Component({
   selector: 'app-wellcome-page',
@@ -15,20 +15,27 @@ import { FriendlyMessage } from "../app-message.service";
 })
 export class WellcomePageComponent implements OnInit {
 
+  api:VgAPI;
+
   constructor(
-    private auth: AuthService,
+    public auth: AuthService,
     private route: ActivatedRoute,
     private http: HttpClient,
     private mess_serv: MessagingService,
     private router: Router,
-    private appMsg: AppMessageService,
+    public appMsg: AppMessageService,
   ) {
   }
   ngOnInit() {
+    console.log('nginit', this.api);
+  }
 
+  onPlayerReady(api:VgAPI) {
+    this.api = api;
   }
 
   test(){
+    this.api.seekTime(50, true);
     this.appMsg.showMessage("test pressed!");
   }
 }

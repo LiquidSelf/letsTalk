@@ -2,9 +2,14 @@
   <div id="content_all">
     <app-top-bar></app-top-bar>
     <!--<app-left-bar></app-left-bar>-->
-    <video class="library" controls preload="auto" data-config="some-js-object-here">
-      <source src="video-url.mp4" type='video/mp4'>
-    </video>
+    <div id="player">
+      <vg-player (onPlayerReady)="onPlayerReady($event)">
+        <video [vgMedia]="media" #media id="singleVideo" preload="auto" controls>
+          <source src="/vids/almaty2020.mp4" type="video/mp4">
+        </video>
+      </vg-player>
+    </div>
+    <div id="testBUTTON" (click)="test()"></div>
     <div id = "chat">
       <app-chat-page></app-chat-page>
     </div>

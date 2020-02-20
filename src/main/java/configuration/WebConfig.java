@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -39,6 +40,9 @@ implements WebMvcConfigurer {
         registry
         .addResourceHandler("*.js", "*.css", "*.html")
         .addResourceLocations("/");
+        registry
+        .addResourceHandler("/vids/**","/vids/**.mp4", "**.jpg")
+        .addResourceLocations("/vids/");
     }
 
     @Override
@@ -48,7 +52,7 @@ implements WebMvcConfigurer {
     }
 
     @Bean
-    public CharacterEncodingFilter characterEncodingFilter() {
+    public OncePerRequestFilter characterEncodingFilter() {
         return new Utf8Filter();
     }
 }

@@ -15,7 +15,7 @@ export class AppComponent {
               private http: HttpClient,
               private router: Router,
               private auth: AuthService,
-              private appMsgs: AppMessageService,
+              public appMsgs: AppMessageService,
   ) {
   }
 }

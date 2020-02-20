@@ -17,7 +17,7 @@ import { UsersDTO } from "../dto/users/UsersDTO";
 export class TopBarComponent implements OnInit {
 
   constructor(
-    private auth: AuthService,
+    public auth: AuthService,
     private route: ActivatedRoute,
     private http: HttpClient,
     private mess_serv: MessagingService,

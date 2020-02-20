@@ -13,15 +13,20 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TopBarComponent } from './top-bar/top-bar.component';
 import { LeftBarComponent } from './left-bar/left-bar.component';
 import { FriendlyMessagesComponent } from './friendly-messages/friendly-messages.component';
-import { MatDialogModule } from "@angular/material";
+import { MatDialogModule } from "@angular/material/dialog";
 import { UserCabinetComponent} from "./user-cabinet/user-cabinet.component";
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { RegistrationPageComponent } from './registration-page/registration-page.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { VgCoreModule } from 'videogular2/core';
-import { VgControlsModule } from 'videogular2/controls';
-import { VgOverlayPlayModule } from 'videogular2/overlay-play';
-import { VgBufferingModule } from 'videogular2/buffering';
+import {
+  VgBufferingModule,
+  VgCoreModule,
+  VgOverlayPlayModule,
+  VgControlsModule }
+  from 'ngx-videogular';
+import { FileUploadPanelComponent } from './file-upload-panel/file-upload-panel.component';
+import { FileSelectDirective, FileUploadModule } from 'ng2-file-upload';
 
 @NgModule({
   declarations: [
@@ -34,6 +39,7 @@ import { VgBufferingModule } from 'videogular2/buffering';
     FriendlyMessagesComponent,
     UserCabinetComponent,
     RegistrationPageComponent,
+    FileUploadPanelComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,7 +52,11 @@ import { VgBufferingModule } from 'videogular2/buffering';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
-
+    VgBufferingModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    FileUploadModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterseptor, multi: true }
