@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { FileUploader } from 'ng2-file-upload';
+import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
+import {AuthService} from "../auth.service";
 
-const URL = '/api/';
+const URL = '/api/uploadFile';
+
 @Component({
   selector: 'app-file-upload-panel',
   templateUrl: './file-upload-panel.component.html',
@@ -14,22 +16,17 @@ export class FileUploadPanelComponent {
   hasAnotherDropZoneOver:boolean;
   response:string;
 
-  constructor (){
-    this.uploader = new FileUploader({
-      url: URL,
-      disableMultipart: true, // 'DisableMultipart' must be 'true' for formatDataFunction to be called.
-      formatDataFunctionIsAsync: true,
-      formatDataFunction: async (item) => {
-        return new Promise( (resolve, reject) => {
-          resolve({
-            name: item._file.name,
-            length: item._file.size,
-            contentType: item._file.type,
-            date: new Date()
-          });
-        });
-      }
-    });
+  constructor (private auth: AuthService){
+
+    console.log(auth.getToken());
+
+
+    this.uploader = new FileUploader(this.opts());
+
+    this.uploader.onBeforeUploadItem = (fileItem: any) => {
+      this.uploader.setOptions(this.opts());
+      console.log(this.uploader);
+    };
 
     this.hasBaseDropZoneOver = false;
     this.hasAnotherDropZoneOver = false;
@@ -38,6 +35,18 @@ export class FileUploadPanelComponent {
 
     this.uploader.response.subscribe( res => this.response = res );
   }
+
+  opts():FileUploaderOptions{
+    let options:FileUploaderOptions =
+      {
+        url: URL,
+        disableMultipart: false,
+        headers: [{ name: 'Authorization', value: 'Bearer '+this.auth.getToken()}]
+      };
+
+    return options;
+  }
+
 
   public fileOverBase(e:any):void {
     this.hasBaseDropZoneOver = e;

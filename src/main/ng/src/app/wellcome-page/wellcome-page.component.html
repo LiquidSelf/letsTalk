@@ -1,15 +1,23 @@
 <div id = "wellcome_page">
+
+  <app-top-bar></app-top-bar>
+
   <div id="content_all">
-    <app-top-bar></app-top-bar>
     <!--<app-left-bar></app-left-bar>-->
-    <div id="player">
-      <vg-player (onPlayerReady)="onPlayerReady($event)">
-        <video [vgMedia]="media" #media id="singleVideo" preload="auto" controls>
-          <source src="/vids/almaty2020.mp4" type="video/mp4">
-        </video>
-      </vg-player>
-    </div>
-    <div id="testBUTTON" (click)="test()"></div>
+    <!--<div id="player">-->
+      <!--<vg-player (onPlayerReady)="onPlayerReady($event)">-->
+        <!--<video [vgMedia]="media" #media id="singleVideo" preload="auto" controls>-->
+          <!--<source src="/vids/almaty2020.mp4" type="video/mp4">-->
+        <!--</video>-->
+      <!--</vg-player>-->
+    <!--</div>-->
+    <!--<div id="testBUTTON" (click)="test()"></div>-->
+    <!--<app-file-upload-panel style="background: white"></app-file-upload-panel>-->
+
+
+    <app-feed *ngIf="auth.user"></app-feed>
+
+
     <div id = "chat">
       <app-chat-page></app-chat-page>
     </div>

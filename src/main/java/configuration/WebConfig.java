@@ -1,6 +1,7 @@
 package configuration;
 
 import controllers.AngularREST;
+import controllers.FileUploadREST;
 import dao.Dao;
 import dto.Greeting;
 import filters.ExceptionsManager;
@@ -10,7 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -25,6 +25,7 @@ import java.util.List;
 @EnableWebMvc
 @ComponentScan(basePackageClasses = {
         AngularREST.class,
+        FileUploadREST.class,
         Greeting.class,
         DatabaseConfig.class,
         JwtTokenUtil.class,

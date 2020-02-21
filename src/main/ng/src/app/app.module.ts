@@ -27,6 +27,7 @@ import {
   from 'ngx-videogular';
 import { FileUploadPanelComponent } from './file-upload-panel/file-upload-panel.component';
 import { FileSelectDirective, FileUploadModule } from 'ng2-file-upload';
+import { FeedComponent } from './feed/feed.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { FileSelectDirective, FileUploadModule } from 'ng2-file-upload';
     UserCabinetComponent,
     RegistrationPageComponent,
     FileUploadPanelComponent,
+    FeedComponent,
   ],
   imports: [
     BrowserModule,
