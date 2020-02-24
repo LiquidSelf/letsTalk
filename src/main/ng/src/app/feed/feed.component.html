@@ -1,5 +1,14 @@
 <div id="feed_container">
+  <div id="controls">
+    <div id="add_button" (click)="newRecord()">
+      <span>add</span>
+    </div>
+    <div id="layout_buttons">
+      <span>aaa</span>
+      <span>bbb</span>
+    </div>
+  </div>
   <div id="feed">
-    <div *ngFor="let record of feedMsgs" class="feed_item">aaa</div>
+    <div *ngFor="let record of feedMsgs" class="feed_item">{{record.imageUrl}} {{record.description}}</div>
   </div>
 </div>

@@ -20,7 +20,7 @@ import services.JwtTokenUtil;
 @RequestMapping("/api/users")
 public class UsersCRUD {
 
-    @Autowired private Dao<DB_USER, String> usersDao;
+    @Autowired private Dao<DB_USER, String> dao;
     @Autowired private UserDetailsManager userDetailsManager;
     @Autowired private JwtTokenUtil tokenUtil;
 

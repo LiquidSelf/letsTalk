@@ -7,6 +7,7 @@ import dto.Greeting;
 import filters.ExceptionsManager;
 import filters.JwtRequestFilter;
 import filters.Utf8Filter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import services.JwtTokenUtil;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -36,14 +38,30 @@ import java.util.List;
 public class WebConfig
 implements WebMvcConfigurer {
 
+    @Value("${app.upload.dir.name:${user.home}}")
+    public String uploadDirName;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry
         .addResourceHandler("*.js", "*.css", "*.html")
         .addResourceLocations("/");
+
+        String path =  System.getProperty( "catalina.base" ) +File.separator+ uploadDirName +File.separator;
+
         registry
-        .addResourceHandler("/vids/**","/vids/**.mp4", "**.jpg")
-        .addResourceLocations("/vids/");
+        .addResourceHandler("*.mp4")
+        .addResourceLocations(
+        "file://"+System.getProperty( "catalina.base" ) +File.separator+ uploadDirName +File.separator);
+
+        registry
+        .addResourceHandler("*.png","*.jpg","*.gif")
+        .addResourceLocations(
+        "file://"+System.getProperty( "catalina.base" ) +File.separator+ uploadDirName +File.separator);
+
+        registry
+        .addResourceHandler("*.png","*.jpg","*.gif")
+        .addResourceLocations("classpath:/img/");
     }
 
     @Override

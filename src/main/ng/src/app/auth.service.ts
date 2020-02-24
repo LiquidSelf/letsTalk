@@ -14,6 +14,8 @@ import {DTO} from "./dto/DTO";
 })
 export class AuthService {
 
+  public static origin_url: string = window.location.origin;
+
   private static USER_TOKEN:string = "saved_token";
   private _user:UsersDTO;
 
@@ -31,14 +33,14 @@ export class AuthService {
       'Content-Type': 'application/json'
     });
 
-    this.http.post<DTO>(
+    this.http.post<DTO<string>>(
       "/authenticate",
       credentials,
       {
         headers:headers
       }
     ).subscribe(
-      (next:DTO)=>{
+      (next:DTO<string>)=>{
         this.putToken(next.data);
       },
       (error) => {
@@ -56,14 +58,14 @@ export class AuthService {
         'Content-Type': 'application/json',
       });
 
-      this.http.post<DTO>(
+      this.http.post<DTO<string>>(
         "/registration",
         newCredentials,
         {
           headers:headers,
         }
       ).subscribe(
-        (next:DTO)=>{
+        (next:DTO<string>)=>{
           this.router.navigateByUrl('/wellcome');
         },
         (error) => {
@@ -80,11 +82,11 @@ export class AuthService {
 
   updateUser(updateMe:UsersDTO, callback:(success:boolean, errorMsg?:string) => void){
 
-    this.http.post<DTO>(
+    this.http.post<DTO<string>>(
       "/api/users/",
       updateMe,
     ).subscribe(
-      (next:DTO)=>{
+      (next:DTO<string>)=>{
         if(next) this.putToken(next.data);
         if(!callback) return;
         callback(true);

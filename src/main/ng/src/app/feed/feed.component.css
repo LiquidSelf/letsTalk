@@ -1,18 +1,29 @@
 #feed_container{
-  width: 100%;
-  height: 100%;
-  padding: 1px 90px 1px 90px;
+  width: 80%;
+  height: calc(100% - 40px);
+  display: grid;
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  margin: auto;
 }
 
 #feed{
   height: 100%;
+  width: 100%;
   background: #ffffffc9;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: repeat(999, 120px);
   padding: 0px 50px 0px 50px;
+  overflow: auto;
 }
 
+#feed_container #controls{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
 .feed_item{
   justify-content: center;
   align-items: center;
@@ -21,4 +32,19 @@
   box-sizing: border-box;
   background: #3e47497a;
   margin: 2px 2px -1px -1px;
+}
+
+#feed_container #add_button{
+  left: 0px;
+  top: 0px;
+  background: white;
+}
+#feed_container #layout_buttons{
+  right: 0px;
+  top: 0px;
+}
+#controls div{
+  position: absolute;
+  user-select: none;
+  cursor: pointer;
 }

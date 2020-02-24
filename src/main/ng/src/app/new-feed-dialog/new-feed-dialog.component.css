@@ -1,0 +1,7 @@
+.full_width{
+  width: 100%;
+}
+
+.row{
+  display: flex;
+}

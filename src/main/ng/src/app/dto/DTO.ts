@@ -1,17 +1,17 @@
-export class DTO{
+export class DTO<T>{
 
-  private _data: any;
+  private _data: T;
 
-  constructor(data: any) {
+  constructor(data: T) {
     this._data = data;
   }
 
 
-  get data(): any {
+  get data(): T {
     return this._data;
   }
 
-  set data(value: any) {
+  set data(value: T) {
     this._data = value;
   }
 }

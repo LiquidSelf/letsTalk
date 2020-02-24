@@ -19,6 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { RegistrationPageComponent } from './registration-page/registration-page.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import {
   VgBufferingModule,
   VgCoreModule,
@@ -28,6 +29,7 @@ import {
 import { FileUploadPanelComponent } from './file-upload-panel/file-upload-panel.component';
 import { FileSelectDirective, FileUploadModule } from 'ng2-file-upload';
 import { FeedComponent } from './feed/feed.component';
+import { NewFeedDialogComponent } from './new-feed-dialog/new-feed-dialog.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +44,7 @@ import { FeedComponent } from './feed/feed.component';
     RegistrationPageComponent,
     FileUploadPanelComponent,
     FeedComponent,
+    NewFeedDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -59,6 +62,7 @@ import { FeedComponent } from './feed/feed.component';
     VgControlsModule,
     VgOverlayPlayModule,
     FileUploadModule,
+    DragDropModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterseptor, multi: true }

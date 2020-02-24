@@ -16,16 +16,14 @@ export class FileUploadPanelComponent {
   hasAnotherDropZoneOver:boolean;
   response:string;
 
+  loadedImageUrl:string = 'drop.png';
+
   constructor (private auth: AuthService){
-
-    console.log(auth.getToken());
-
 
     this.uploader = new FileUploader(this.opts());
 
     this.uploader.onBeforeUploadItem = (fileItem: any) => {
       this.uploader.setOptions(this.opts());
-      console.log(this.uploader);
     };
 
     this.hasBaseDropZoneOver = false;
@@ -33,13 +31,28 @@ export class FileUploadPanelComponent {
 
     this.response = '';
 
-    this.uploader.response.subscribe( res => this.response = res );
+    this.uploader.response.subscribe( res => {
+
+        if(!(typeof res === 'string')) return;
+
+        let response = JSON.parse(res);
+
+        console.log('next',response);
+        if(response.data){
+          console.log('next',response.data);
+          this.loadedImageUrl = response.data;
+        }
+      },
+      err =>{
+       console.log("error", err)
+      });
   }
 
   opts():FileUploaderOptions{
     let options:FileUploaderOptions =
       {
         url: URL,
+        autoUpload: true,
         disableMultipart: false,
         headers: [{ name: 'Authorization', value: 'Bearer '+this.auth.getToken()}]
       };

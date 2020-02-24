@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01
+      author: sereja
+      changes:
+        - createTable:
+            tableName: feed_items
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: image_url
+                  type: varchar(500)
+              - column:
+                  name: description
+                  type: text

@@ -1,0 +1,23 @@
+<div class="sad" cdkDrag
+     cdkDragRootElement=".cdk-overlay-pane"
+     cdkDragHandle>
+  <h1 mat-dialog-title>Hi!</h1>
+  <div mat-dialog-content class="row">
+
+    <div>
+      <app-file-upload-panel></app-file-upload-panel>
+    </div>
+    <div>
+      <p>description</p>
+      <mat-form-field class="full_width">
+        <textarea matInput cdkTextareaAutosize type="text" [(ngModel)]="data.description"></textarea>
+      </mat-form-field>
+    </div>
+
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button (click)="onOkClick()" cdkFocusInitial>Ok</button>
+  </div>
+
+</div>
