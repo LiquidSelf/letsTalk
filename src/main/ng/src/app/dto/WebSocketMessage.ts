@@ -1,20 +1,25 @@
+import {MessageType} from "../messaging.service";
+
 export class WebSocketMessage{
 
   private _data: any;
   private _token: string;
-  private _isPing: boolean = false;
+  private _messageType: MessageType;
 
-  constructor(token: string) {
+  constructor(token: string, type: MessageType) {
+    this._data = null;
+    this._messageType = null;
     this._token = token;
+    this._messageType = type;
   }
 
 
-  get isPing(): boolean {
-    return this._isPing;
+  get messageType(): MessageType {
+    return this._messageType;
   }
 
-  set isPing(value: boolean) {
-    this._isPing = value;
+  set messageType(value: MessageType) {
+    this._messageType = value;
   }
 
   get data(): any {

@@ -1,0 +1,12 @@
+<div id="details_holder">
+  <button class="btn btn-primary" routerLink="/">< - Back</button>
+  <div id="details">
+    <div *ngIf="isLoading" id="load_in_process" [style.background-image]="'url(loading_clocks.gif)'"></div>
+    <div *ngIf="record" id="imageContainer">
+      <img [src]="record.imageUrl" id="image" onerror="this.style.display = 'none'">
+    </div>
+    <div *ngIf="record" id="description_container">
+      <div id="description">{{record.description}}</div>
+    </div>
+  </div>
+</div>

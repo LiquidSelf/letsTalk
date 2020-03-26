@@ -1,3 +1,24 @@
 .dropdown_here{
-  background: white;
+  width: 100%;
+  object-fit: contain;
+  height: 100%;
+  max-height: inherit;
+  max-width: inherit;
+}
+.dropdown_container{
+  width: 250px;
+  height: 250px;
+  border: solid #c6c6c69e 1px;
+  transition: all 0.5s;
+}
+
+.fileIsOver{
+  border: solid #a3cbe0 4px;
+  background: #007bff1c;
+}
+.dropdown_container:hover{
+  background: #949494;
+}
+
+.fileIsOverTest{
 }

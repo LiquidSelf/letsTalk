@@ -2,6 +2,32 @@
   width: 100%;
 }
 
-.row{
+.row_items{
   display: flex;
+}
+
+.row_items>div{
+  padding: 10px;
+}
+
+.text_area{
+  width: 100%;
+  background: #3c3c3c;
+  height: 250px;
+}
+.mat-form-field-infix{
+  width: 300px;
+  height: 2400px;
+}
+.text_area_holder{
+  width: 100%;
+  height: 100%;
+}
+.text_area_holder div{
+  width: 100%;
+  height: 100%;
+}
+
+.description {
+  width: 100%;
 }

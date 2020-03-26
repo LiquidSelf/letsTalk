@@ -1,6 +1,10 @@
 package dto;
 
+import dto.websocket.WSMessage;
+
 public class Message {
+
+    public static final String type = "CHAT_MESSAGE";
     private String text;
     private String username;
 

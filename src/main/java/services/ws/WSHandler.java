@@ -2,11 +2,11 @@ package services.ws;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.Message;
 import dto.websocket.WSMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.socket.*;
 import services.JwtTokenUtil;
@@ -16,10 +16,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.springframework.web.socket.CloseStatus.POLICY_VIOLATION;
 import static org.springframework.web.socket.CloseStatus.SESSION_NOT_RELIABLE;
-import static org.springframework.web.socket.CloseStatus.TLS_HANDSHAKE_FAILURE;
 
+@Component
 public class WSHandler implements WebSocketHandler {
 
     private static volatile List<WebSocketSession> sessions = new ArrayList<WebSocketSession>();
@@ -39,38 +38,60 @@ public class WSHandler implements WebSocketHandler {
     @Override
     public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage) throws Exception {
         String payload = webSocketMessage.getPayload().toString();
-        if(payload == null || payload.length() == 0) throw new NullPointerException("you cannot send empty message");
+        if(StringUtils.isEmpty(payload)) throw new NullPointerException("you cannot send empty message");
 
-        JavaType typeMessage = jackson.getTypeFactory().constructParametricType(WSMessage.class, Message.class);
-
-        WSMessage<Message> wsMessage = jackson.readValue(payload, typeMessage);
+        WSMessage wsMessage = jackson.readValue(payload, WSMessage.class);
 
         validate(wsMessage, webSocketSession);
-        if(wsMessage.get_isPing()) return;
 
+        switch (wsMessage.get_messageType()){
+            case PING: break;
+            case CHAT_MESSAGE:{
+                handelChatMessage(wsMessage);
+                break;
+            }
+            case FEED_MESSAGE:{
 
-        String username = tokenUtil.getUsernameFromToken(wsMessage.get_token());
-
-        Message userMessage = wsMessage.get_data();
-        userMessage.setUsername(username);
-
-        handleUserMessage(userMessage);
+                break;
+            }
+            default: throw new RuntimeException("unknown message type");
+        }
     }
 
-    private void handleUserMessage(Message userMessage) throws JsonProcessingException, IOException {
+    private void handelChatMessage(WSMessage<Message> wsMessage) throws JsonProcessingException, IOException {
 
-        if(userMessage == null || StringUtils.isEmpty(userMessage.getText())) throw new RuntimeException("empty message");
-        if(StringUtils.isEmpty(userMessage.getUsername())) throw new RuntimeException("empty username");
+        if(wsMessage == null) throw new RuntimeException("empty message");
+        String token = wsMessage.get_token();
 
+        wsMessage.set_token(null);
+
+        String username = tokenUtil.getUsernameFromToken(token);
+
+        Message message = wsMessage.get_data();
+        message.setUsername(username);
 
         if(messages.size() >= 20) messages.remove(0);
-        messages.add(userMessage);
+        messages.add(message);
 
-        String message = jackson.writeValueAsString(userMessage);
+        String json = jackson.writeValueAsString(wsMessage);
 
+        goSEND(json);
+    }
+
+    public void onNewFeedItem() throws JsonProcessingException {
+
+        WSMessage<Message> ntf = new WSMessage<Message>();
+        ntf.set_messageType(WSMessage.MessageType.FEED_MESSAGE);
+
+        String  json = jackson.writeValueAsString(ntf);
+
+        goSEND(json);
+    }
+
+    private void goSEND(String json){
         for(WebSocketSession ses : sessions){
             if(ses.isOpen())
-                try { ses.sendMessage(new TextMessage(message));}
+                try { ses.sendMessage(new TextMessage(json));}
                 catch (IOException e) {
                     System.out.println(e);
                 }

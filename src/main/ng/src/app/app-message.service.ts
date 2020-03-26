@@ -14,10 +14,10 @@ export class AppMessageService {
   private lastRemovedIndex: number = 0;
 
   constructor() {
-    this.showMessage("test messages",1500, MessageColor._BLUE);
-    this.showMessage("test messages",5990, MessageColor._YELLOW);
-    this.showMessage("test messages",3500, MessageColor._GREEN);
-    this.showMessage("test messages",1000, MessageColor._RED);
+    this.showMessage("test alert",1500, MessageColor._BLUE);
+    this.showMessage("test alert",5990, MessageColor._YELLOW);
+    this.showMessage("test alert",3500, MessageColor._GREEN);
+    this.showMessage("test alert",1000, MessageColor._RED);
   }
 
   rmvn(delay:number){

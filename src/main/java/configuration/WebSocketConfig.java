@@ -1,5 +1,6 @@
 package configuration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import services.ws.WSHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,16 +13,11 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
+    @Autowired WSHandler wsHandler;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         System.out.println("registerWebSocketHandlers");
-        registry.addHandler(myHandler(), "/ws_api/chat/web_socket");
+        registry.addHandler(wsHandler, "/ws_api/chat/web_socket");
     }
-
-    @Bean
-    public WebSocketHandler myHandler() {
-        return new WSHandler();
-    }
-
-
 }

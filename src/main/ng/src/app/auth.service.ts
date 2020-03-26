@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import {UsersDTO} from "./dto/users/UsersDTO";
 import {LoginPageComponent} from "./login-page/login-page.component";
 import {RegistrationPageComponent} from "./registration-page/registration-page.component";
-import { AppMessageService } from "./app-message.service";
+import {AppMessageService, MessageColor} from "./app-message.service";
 import { FriendlyMessage } from "./app-message.service";
 import {DTO} from "./dto/DTO";
 
@@ -66,6 +66,7 @@ export class AuthService {
         }
       ).subscribe(
         (next:DTO<string>)=>{
+          this.appMsg.showMessage(next.data, 10000, MessageColor._GREEN);
           this.router.navigateByUrl('/wellcome');
         },
         (error) => {

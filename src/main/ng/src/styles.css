@@ -12,3 +12,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   word-break: break-all;
   hyphens: auto;
 }
+
+.blackout:hover {
+  filter: brightness(80%);
+  transition: filter 0.2s;
+}

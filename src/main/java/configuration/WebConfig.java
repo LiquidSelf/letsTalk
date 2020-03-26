@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.http.CacheControl;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -21,6 +22,7 @@ import services.JwtTokenUtil;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 @PropertySource("classpath:application.properties")
@@ -47,21 +49,18 @@ implements WebMvcConfigurer {
         .addResourceHandler("*.js", "*.css", "*.html")
         .addResourceLocations("/");
 
-        String path =  System.getProperty( "catalina.base" ) +File.separator+ uploadDirName +File.separator;
+        String uploadPATH =  System.getProperty( "catalina.base" ) +File.separator+ uploadDirName +File.separator;
 
         registry
         .addResourceHandler("*.mp4")
-        .addResourceLocations(
-        "file://"+System.getProperty( "catalina.base" ) +File.separator+ uploadDirName +File.separator);
+        .addResourceLocations("file:"+uploadPATH);
 
         registry
         .addResourceHandler("*.png","*.jpg","*.gif")
-        .addResourceLocations(
-        "file://"+System.getProperty( "catalina.base" ) +File.separator+ uploadDirName +File.separator);
+        .setCacheControl(CacheControl.maxAge(5, TimeUnit.MINUTES))
+        .addResourceLocations("file:"+uploadPATH, "classpath:/img/");
 
-        registry
-        .addResourceHandler("*.png","*.jpg","*.gif")
-        .addResourceLocations("classpath:/img/");
+
     }
 
     @Override

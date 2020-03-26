@@ -18,8 +18,8 @@ public class FeedDao implements Dao<DB_FEED, Long> {
 
     @Override
     public DB_FEED find(@NonNull Long id) {
-        DB_FEED user = entityManager.find(DB_FEED.class, id);
-        return user;
+        DB_FEED entity = entityManager.find(DB_FEED.class, id);
+        return entity;
     }
 
     @Override
@@ -31,19 +31,19 @@ public class FeedDao implements Dao<DB_FEED, Long> {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(@NonNull DB_FEED user) {
-        entityManager.merge(user);
+    public DB_FEED save(@NonNull DB_FEED entity) {
+        return entityManager.merge(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(@NonNull DB_FEED user) {
-        entityManager.merge(user);
+    public DB_FEED update(@NonNull DB_FEED entity) {
+        return entityManager.merge(entity);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(@NonNull DB_FEED user) {
-        entityManager.remove(user);
+    public void delete(@NonNull DB_FEED entity) {
+        entityManager.remove(entity);
     }
 }

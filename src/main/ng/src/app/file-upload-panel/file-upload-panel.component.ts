@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
 import { FileUploader, FileUploaderOptions } from 'ng2-file-upload';
 import {AuthService} from "../auth.service";
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
 const URL = '/api/uploadFile';
 
@@ -11,14 +11,21 @@ const URL = '/api/uploadFile';
 })
 export class FileUploadPanelComponent {
 
+  @ViewChild('choose_button')
+  public choiseButton: ElementRef;
+
   uploader:FileUploader;
   hasBaseDropZoneOver:boolean;
   hasAnotherDropZoneOver:boolean;
   response:string;
 
-  loadedImageUrl:string = 'drop.png';
+  loadedImageUrl:string;
 
-  constructor (private auth: AuthService){
+  // @Output() notify: EventEmitter<string> = new EventEmitter<string>();
+
+  constructor (
+    private auth: AuthService
+  ){
 
     this.uploader = new FileUploader(this.opts());
 
@@ -37,7 +44,6 @@ export class FileUploadPanelComponent {
 
         let response = JSON.parse(res);
 
-        console.log('next',response);
         if(response.data){
           console.log('next',response.data);
           this.loadedImageUrl = response.data;
@@ -65,7 +71,7 @@ export class FileUploadPanelComponent {
     this.hasBaseDropZoneOver = e;
   }
 
-  public fileOverAnother(e:any):void {
-    this.hasAnotherDropZoneOver = e;
+  chooseFile(){
+    this.choiseButton.nativeElement.click();
   }
 }

@@ -31,14 +31,14 @@ public class UsersDao implements Dao<DB_USER, String> {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(@NonNull DB_USER user) {
-        entityManager.merge(user);
+    public DB_USER save(@NonNull DB_USER user) {
+        return entityManager.merge(user);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void update(@NonNull DB_USER user) {
-        entityManager.merge(user);
+    public DB_USER update(@NonNull DB_USER user) {
+        return entityManager.merge(user);
     }
 
     @Override

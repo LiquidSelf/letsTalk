@@ -21,8 +21,10 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
+import org.springframework.web.socket.WebSocketHandler;
 import security.auth.DB_DetailService;
 import security.auth.JwtAuthProvider;
+import services.ws.WSHandler;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +47,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     ObjectMapper jackson(){
         ObjectMapper mapper = new ObjectMapper();
         return mapper;
+    }
+
+    @Bean
+    public WebSocketHandler myHandler() {
+        return new WSHandler();
     }
 
     @Bean(name = "multipartResolver")

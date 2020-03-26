@@ -30,6 +30,7 @@ import { FileUploadPanelComponent } from './file-upload-panel/file-upload-panel.
 import { FileSelectDirective, FileUploadModule } from 'ng2-file-upload';
 import { FeedComponent } from './feed/feed.component';
 import { NewFeedDialogComponent } from './new-feed-dialog/new-feed-dialog.component';
+import { FeedDetailsComponent } from './feed-details/feed-details.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { NewFeedDialogComponent } from './new-feed-dialog/new-feed-dialog.compon
     FileUploadPanelComponent,
     FeedComponent,
     NewFeedDialogComponent,
+    FeedDetailsComponent,
   ],
   imports: [
     BrowserModule,

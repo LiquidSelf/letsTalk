@@ -4,8 +4,8 @@ import { webSocket } from 'rxjs/webSocket';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { throwIfEmpty, mergeMap, retry } from 'rxjs/operators';
 import { WebSocketSubject, WebSocketSubjectConfig } from 'rxjs/webSocket';
-import { Observer } from 'rxjs/internal/types';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { Observer } from 'rxjs/internal/types';
 import {AuthService} from "./auth.service";
 import {Message} from "./chat-page/Message";
 import {AppMessageService, MessageColor} from "./app-message.service";
@@ -25,8 +25,8 @@ export class MessagingService implements Observer<WebSocketMessage>, OnDestroy{
   private isWaiting: boolean = false;
 
 
-  next = function (mess) {
-    this.onNewMessage(mess, true);
+  next = function (mess:WebSocketMessage) {
+    this.onNewWsMessage(mess);
   };
   error= function (err) {
     console.error("error on MessagingService ws", err);
@@ -55,13 +55,16 @@ export class MessagingService implements Observer<WebSocketMessage>, OnDestroy{
 
     this.getAllMessages().subscribe(
       (result:Message[])=>{
-        this.onNewMessage(result, false);
+        this.onNewChatMessage(result, false);
         this.initWs(this.auth.getToken());
         this.isWaiting = false;
       },
       (ex: any)=>{
         if(ex.status == 403) this.appMess.showUnauthorized();
-        else                 console.log('unexpected exception on get all msgs', ex);
+        else if(ex.status == 0 ) {
+          console.log("server is down");
+        }
+        else console.log('unexpected exception on get all msgs', ex);
 
         this.isWaiting = false;
       }
@@ -71,8 +74,15 @@ export class MessagingService implements Observer<WebSocketMessage>, OnDestroy{
   public initWs(token:string){
     let wsUrl = this.origin_url.replace('http', 'ws')+"/ws_api/chat/web_socket";
 
-    this.subject = webSocket({
+    this.subject = webSocket<WebSocketMessage>({
       url: wsUrl,
+      deserializer: (e: MessageEvent)=>{
+        let wm: WebSocketMessage = new WebSocketMessage(null, null);
+        let parsed = JSON.parse(e.data);
+        let asign: WebSocketMessage = Object.assign(wm, parsed);
+
+        return asign;
+      },
       closeObserver: {
         next: (close_event) => {
           this.subject.closed = true;
@@ -103,21 +113,38 @@ export class MessagingService implements Observer<WebSocketMessage>, OnDestroy{
     return this.http.get<Message[]>(this.origin_url + '/api/chat/getMessages');
   }
 
-  onNewMessage(mess: Message[] | Message, async:boolean){
+  onNewChatMessage(mess: Message[] | Message, async:boolean){
     this.messListeners.forEach((listener:MessListener)=> {
-      listener.onMessage(mess, async);
+      if(listener.interestedIN()) {
+        listener.interestedIN().forEach((isin: MessageType) => {
+          if (isin == MessageType._CHAT) listener.onMessage(mess, async);
+
+        })
+      }
+    });
+  }
+
+  onNewWsMessage(wsMessage: WebSocketMessage){
+    this.messListeners.forEach((listener:MessListener)=> {
+      if(listener.interestedIN()) {
+        listener.interestedIN().forEach((isin: MessageType) => {
+          if (isin == MessageType._ALL || isin === wsMessage.messageType) {
+            listener.onMessage(wsMessage.data, true);
+          }
+
+        })
+      }
     });
   }
 
   sendPing(){
-    var ws_mes:WebSocketMessage = new WebSocketMessage(this.auth.getToken());
-    ws_mes.isPing = true;
+    var ws_mes:WebSocketMessage = new WebSocketMessage(this.auth.getToken(), MessageType._PING);
     this.subject.next(ws_mes);
   }
 
   sendMessage(message: string){
     let msg: Message = new Message(message);
-    let ws_mes:WebSocketMessage = new WebSocketMessage(this.auth.getToken());
+    let ws_mes:WebSocketMessage = new WebSocketMessage(this.auth.getToken(), MessageType._CHAT);
     ws_mes.data = msg;
     this.subject.next(ws_mes);
   }
@@ -140,7 +167,16 @@ export class MessagingService implements Observer<WebSocketMessage>, OnDestroy{
   }
 }
 
+export enum MessageType{
+  _ALL    =  'ALL',
+  _PING   =  'PING',
+  _CHAT   =  'CHAT_MESSAGE',
+  _FEED   =  'FEED_MESSAGE',
+}
+
 
 export interface MessListener {
   onMessage(mess: Message[] | Message, async:boolean) : void;
+  /**mess types listener is interested in*/
+  interestedIN():MessageType[];
 }

@@ -1,14 +1,18 @@
 <div id="feed_container">
+  <div *ngIf="isLoading" id="load_in_process" [style.background-image]="'url(loading_spinner.gif)'"></div>
   <div id="controls">
-    <div id="add_button" (click)="newRecord()">
-      <span>add</span>
+    <div id="add_button" class="buttons blackout" (click)="newRecord()">
+      <span>new record</span>
     </div>
-    <div id="layout_buttons">
-      <span>aaa</span>
-      <span>bbb</span>
+    <div id="layout_buttons" class="buttons blackout">
+      <span (click)="chgStyle($event)">change style</span>
     </div>
   </div>
-  <div id="feed">
-    <div *ngFor="let record of feedMsgs" class="feed_item">{{record.imageUrl}} {{record.description}}</div>
+  <div id="feed" [ngClass]="displayOrder ? 'display_column' : ''">
+    <div *ngFor="let record of feedMsgs"
+         class="feed_item blackout"
+         [style.background-image]="record.imageUrl ? 'url('+record.imageUrl+')' : ''" routerLink="/feed/{{record.id}}">
+      <span class="description">{{record.description}}</span>
+    </div>
   </div>
 </div>

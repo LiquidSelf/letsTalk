@@ -1,7 +1,7 @@
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import {MessagingService, MessListener} from '../messaging.service';
-import { Component, AfterViewChecked, ElementRef, ViewChild, OnInit} from '@angular/core'
+import { MessageType, MessagingService, MessListener } from '../messaging.service';
+import { Component, AfterViewChecked, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core'
 import { AuthService } from "../auth.service";
 import {AppMessageService, MessageColor} from "../app-message.service";
 import {Message} from "./Message";
@@ -52,9 +52,14 @@ export class ChatPageComponent implements OnInit, MessListener{
     try {
       window.setTimeout(
         ()=>{
-          if(this.myScrollContainer && this.myScrollContainer.nativeElement)
-            this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;},
-        30);
+          if(this.myScrollContainer && this.myScrollContainer.nativeElement) {
+            let scrH = this.myScrollContainer.nativeElement.scrollHeight;
+            if(scrH <= this.myScrollContainer.nativeElement.offsetHeight) this.unreadMessages = [];
+            else
+            this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+          }
+        },
+        50);
     } catch(err) {}
   }
 
@@ -90,6 +95,11 @@ export class ChatPageComponent implements OnInit, MessListener{
     if(!this.isShown || !this.isAutoScroll){
       this.unreadMessages = this.unreadMessages.concat(mess);
     }
+  }
+
+
+  interestedIN(): MessageType[] {
+    return [MessageType._CHAT];
   }
 
   togleChat(){

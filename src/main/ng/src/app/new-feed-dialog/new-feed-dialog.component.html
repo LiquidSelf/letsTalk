@@ -1,23 +1,24 @@
-<div class="sad" cdkDrag
-     cdkDragRootElement=".cdk-overlay-pane"
-     cdkDragHandle>
-  <h1 mat-dialog-title>Hi!</h1>
-  <div mat-dialog-content class="row">
-
+<div class="sad">
+  <h1 mat-dialog-title
+      cdkDrag
+      cdkDragRootElement=".cdk-overlay-pane"
+      cdkDragHandle>What's new?</h1>
+  <div mat-dialog-content class="row_items">
     <div>
+      <div>Drop image</div>
       <app-file-upload-panel></app-file-upload-panel>
     </div>
-    <div>
-      <p>description</p>
-      <mat-form-field class="full_width">
-        <textarea matInput cdkTextareaAutosize type="text" [(ngModel)]="data.description"></textarea>
+    <div class="description" (mousedown)="stopEvent($event)">
+      <mat-form-field  class="text_area_holder">
+        <mat-label>Drop description</mat-label>
+        <textarea matInput type="text" [(ngModel)]="data.description" class="text_area"></textarea>
       </mat-form-field>
     </div>
 
   </div>
   <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancel</button>
-    <button mat-button (click)="onOkClick()" cdkFocusInitial>Ok</button>
+    <button mat-button (click)="onOkClick()" cdkFocusInitial>Go</button>
   </div>
 
 </div>
