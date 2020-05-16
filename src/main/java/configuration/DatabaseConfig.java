@@ -1,19 +1,17 @@
 package configuration;
 
 import liquibase.integration.spring.SpringLiquibase;
-import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.naming.NamingException;
+import javax.naming.*;
 import javax.sql.DataSource;
 import java.util.Properties;
 
@@ -26,10 +24,10 @@ public class DatabaseConfig {
 
     @Bean
     @DependsOn("springLiquibase")
-    public LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean() throws NamingException {
+    public LocalContainerEntityManagerFactoryBean factoryBean(DataSource dataSource){
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setDataSource(dataSource());
-        factoryBean.setPackagesToScan(new String[]{"*"});
+        factoryBean.setDataSource(dataSource);
+        factoryBean.setPackagesToScan("*");
 
 //        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
 //        factoryBean.setDataSource(dataSource());
@@ -59,30 +57,28 @@ public class DatabaseConfig {
 
     @Bean
     @DependsOn("dataSource")
-    public SpringLiquibase springLiquibase() throws NamingException {
+    public SpringLiquibase springLiquibase(DataSource dataSource) {
         SpringLiquibase springLiquibase = new SpringLiquibase();
         springLiquibase.setChangeLog("classpath:/liquibase/rootChangelog.xml");
-        springLiquibase.setDataSource(dataSource());
-
+        springLiquibase.setDataSource(dataSource);
         return springLiquibase;
     }
 
     @Bean
-    public DataSource dataSource() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-        dataSource.setUrl("jdbc:mysql://localhost:3306/lets_talk?characterEncoding=UTF-8&createDatabaseIfNotExist=true");
-        dataSource.setUsername("museum");
-        dataSource.setPassword("museum");
-
-        return dataSource;
+    public DataSource dataSource() throws NamingException {
+        JndiObjectFactoryBean jndiObjectFactoryBean = new JndiObjectFactoryBean();
+        jndiObjectFactoryBean.setJndiName("jdbc/ltDb");
+        jndiObjectFactoryBean.setResourceRef(true);
+        jndiObjectFactoryBean.setProxyInterface(javax.sql.DataSource.class);
+        jndiObjectFactoryBean.afterPropertiesSet();
+        return (DataSource) jndiObjectFactoryBean.getObject();
     }
 
     @Bean
-    public JpaTransactionManager jpaTransactionManager() throws NamingException {
+    public JpaTransactionManager jpaTransactionManager(DataSource dataSource, LocalContainerEntityManagerFactoryBean factoryBean){
         JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-        jpaTransactionManager.setEntityManagerFactory(localContainerEntityManagerFactoryBean().getObject());
-        jpaTransactionManager.setDataSource(dataSource());
+        jpaTransactionManager.setEntityManagerFactory(factoryBean.getObject());
+        jpaTransactionManager.setDataSource(dataSource);
         return jpaTransactionManager;
     }
 }

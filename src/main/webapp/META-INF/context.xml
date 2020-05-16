@@ -1,0 +1,11 @@
+<Context>
+    <Resource auth="Container"
+              driverClassName="com.mysql.jdbc.Driver"
+              maxTotal="100"
+              maxIdle="30"
+              maxWaitMillis="10000"
+              name="jdbc/ltDb"
+              type="javax.sql.DataSource"
+              url="jdbc:mysql://localhost:3305/lets_talk?characterEncoding=UTF-8&amp;createDatabaseIfNotExist=true"
+              username="museum" password="museum"/>
+</Context>

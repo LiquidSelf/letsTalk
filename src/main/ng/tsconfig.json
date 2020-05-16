@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "outDir": "../webapp",
+    "outDir": "./compiled",
     "sourceMap": true,
     "declaration": false,
     "downlevelIteration": true,

@@ -1,18 +1,13 @@
-package main.webapp.java;
+package configuration;
 
-import configuration.WebConfig;
 import security.WebSecurityConfig;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.lang.Nullable;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class AnnotationsBasedApplicationInitializer
         extends AbstractAnnotationConfigDispatcherServletInitializer {

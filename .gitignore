@@ -2,7 +2,7 @@ letsTalk.iml
 src/main/ng/e2e
 src/main/ng/node_modules
 src/main/ng/node
+src/main/ng/compiled
 .DS_Store
-src/main/webapp
 target
 .idea

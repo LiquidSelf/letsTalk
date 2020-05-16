@@ -22,8 +22,6 @@
         <spring.version>5.1.5.RELEASE</spring.version>
     </properties>
     <dependencies>
-
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -31,13 +29,11 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
             <version>3.8.2</version>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework</groupId>
@@ -203,41 +199,28 @@
 
     <build>
         <finalName>LetsTalk</finalName>
-        <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
             <plugins>
-                <plugin>
-                    <artifactId>maven-clean-plugin</artifactId>
-                    <configuration>
-                        <filesets>
-                            <fileset>
-                                <directory>${project.basedir}/src/main/webapp</directory>
-                                <includes>
-                                    <include>*</include>
-                                </includes>
-                            </fileset>
-                        </filesets>
-                    </configuration>
-                    <version>3.1.0</version>
-                </plugin>
+<!--                <plugin>-->
+<!--                    <artifactId>maven-clean-plugin</artifactId>-->
+<!--                    <configuration>-->
+<!--                        <filesets>-->
+<!--                            <fileset>-->
+<!--                                <directory>${project.basedir}/src/main/build</directory>-->
+<!--                                <includes>-->
+<!--                                    <include>*</include>-->
+<!--                                </includes>-->
+<!--                            </fileset>-->
+<!--                        </filesets>-->
+<!--                    </configuration>-->
+<!--                    <version>3.1.0</version>-->
+<!--                </plugin>-->
                 <plugin>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.0.2</version>
                 </plugin>
                 <plugin>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                    </configuration>
-                </plugin>
-                <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.22.1</version>
-                </plugin>
-                <plugin>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>3.2.2</version>
                 </plugin>
                 <plugin>
                     <artifactId>maven-install-plugin</artifactId>
@@ -247,58 +230,77 @@
                     <artifactId>maven-deploy-plugin</artifactId>
                     <version>2.8.2</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.0</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                        <excludes>
+                            <exclude>${project.basedir}/src/main/ng/**</exclude>
+                        </excludes>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.2.2</version>
+                    <configuration>
+                        <packagingExcludes>${project.basedir}/src/main/ng/**</packagingExcludes>
+                        <webResources>
+                            <resource>
+                                <directory>src/main/ng/compiled</directory>
+                            </resource>
+                        </webResources>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.eirslett</groupId>
+                    <artifactId>frontend-maven-plugin</artifactId>
+                    <version>1.6</version>
+
+                    <configuration>
+                        <workingDirectory>${project.basedir}/src/main/ng</workingDirectory>
+                        <installDirectory>src/main/ng</installDirectory>
+                        <nodeVersion>v12.13.1</nodeVersion>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>install-node-and-npm</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>install-node-and-npm</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>npm_generate_ng</id>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>npm</goal>
+                            </goals>
+                            <configuration>
+                                <arguments>run-script build</arguments>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                            <configuration>
+                                <tasks>
+                                    <echo>Hello world!</echo>
+                                </tasks>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
-        </pluginManagement>
-
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <excludes>
-                        <exclude>${project.basedir}/src/main/ng/**</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>3.2.2</version>
-                <configuration>
-                    <packagingExcludes>${project.basedir}/src/main/ng/**</packagingExcludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.eirslett</groupId>
-                <artifactId>frontend-maven-plugin</artifactId>
-                <version>1.6</version>
-                <configuration>
-                    <workingDirectory>${project.basedir}/src/main/ng</workingDirectory>
-                    <installDirectory>src/main/ng</installDirectory>
-                    <nodeVersion>v12.13.1</nodeVersion>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>install-node-and-npm</id>
-                        <goals>
-                            <goal>install-node-and-npm</goal>
-                        </goals>
-                        <phase>generate-sources</phase>
-                    </execution>
-                    <execution>
-                        <id>npm_generate_ng</id>
-                        <goals>
-                            <goal>npm</goal>
-                        </goals>
-                        <configuration>
-                            <arguments>run-script build</arguments>
-                        </configuration>
-                        <phase>generate-sources</phase>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-
     </build>
 </project>
