@@ -1,8 +1,5 @@
 export class UsersDTO {
 
-  private _exp: number;
-  private _iat: number;
-
   private _username: string;
   private _age: number;
   private _authorities: [];
@@ -10,23 +7,6 @@ export class UsersDTO {
   private _accountNonLocked:       boolean;
   private _credentialsNonExpired:  boolean;
   private _enabled:                boolean;
-
-
-  get exp(): number {
-    return this._exp;
-  }
-
-  set exp(value: number) {
-    this._exp = value;
-  }
-
-  get iat(): number {
-    return this._iat;
-  }
-
-  set iat(value: number) {
-    this._iat = value;
-  }
 
   get username(): string {
     return this._username;

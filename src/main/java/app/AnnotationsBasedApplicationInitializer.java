@@ -1,0 +1,72 @@
+package app;
+
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.lang.Nullable;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import web.WebConfig;
+
+import javax.servlet.*;
+
+public class AnnotationsBasedApplicationInitializer
+        extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+    @Nullable
+    @Override
+    protected ApplicationContextInitializer<?>[] getRootApplicationContextInitializers() {
+        return super.getRootApplicationContextInitializers();
+    }
+
+    //ContextLoaderListener (бэкэнд)
+    @Nullable
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[]{AppConfig.class};
+    }
+    //DispatcherServlet (Контроллеры, вью ресолверы, хендлеры)
+    @Nullable
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class[]{WebConfig.class, WebSecurityConfig.class};
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/"};
+    }
+
+    @Override
+    protected WebApplicationContext createRootApplicationContext() {
+        return super.createRootApplicationContext();
+    }
+
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+
+        super.onStartup(servletContext);
+
+//        final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter(){
+//            @Override
+//            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+//                response.setHeader("privet", "ANDREEEY BLINAAA!! PRIVET:)");
+//                super.doFilterInternal(request, response, filterChain);
+//            }
+//        };
+//
+//        characterEncodingFilter.setEncoding("UTF-8");
+//        characterEncodingFilter.setForceEncoding(true);
+//
+//        FilterRegistration.Dynamic registration = servletContext.addFilter(CharacterEncodingFilter.class.getUsername(), characterEncodingFilter);
+//
+//        registration.addMappingForUrlPatterns(null, true, "/*");
+    }
+
+    @Override
+    protected DispatcherServlet createDispatcherServlet(WebApplicationContext servletAppContext) {
+        System.out.println("createDispatcherServlet");
+        final DispatcherServlet dispatcherServlet = (DispatcherServlet) super.createDispatcherServlet(servletAppContext);
+        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+        return dispatcherServlet;
+    }
+}
